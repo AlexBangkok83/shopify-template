@@ -26,21 +26,22 @@ jobs:
     - name: Generate site
       run: npm run generate:example
       
+    - name: List build directory
+      run: ls -la build/ || echo "Build directory not found"
+      
     - name: Deploy to Vercel (Preview)
       if: github.event_name == 'pull_request'
-      uses: amondnet/vercel-action@v25
+      uses: vercel/action@v1
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./build
         
     - name: Deploy to Vercel (Production)
       if: github.ref == 'refs/heads/main'
-      uses: amondnet/vercel-action@v25
+      uses: vercel/action@v1
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         vercel-args: '--prod'
-        working-directory: ./build
