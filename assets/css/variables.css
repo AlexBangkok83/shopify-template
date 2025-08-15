@@ -1,0 +1,90 @@
+/* CSS Variables - Template System */
+:root {
+  /* Colors - Will be replaced by theme variables */
+  --primary-color: {{PRIMARY_COLOR}};
+  --secondary-color: {{SECONDARY_COLOR}};
+  --accent-color: {{ACCENT_COLOR}};
+  --text-color: {{TEXT_COLOR}};
+  --background-color: {{BACKGROUND_COLOR}};
+  --light-background: {{LIGHT_BACKGROUND}};
+  --border-color: {{BORDER_COLOR}};
+  --success-color: {{SUCCESS_COLOR}};
+  --warning-color: {{WARNING_COLOR}};
+  --error-color: {{ERROR_COLOR}};
+  --shadow-color: {{SHADOW_COLOR}};
+  
+  /* Gradients */
+  --gradient-primary: {{GRADIENT_PRIMARY}};
+  --gradient-secondary: {{GRADIENT_SECONDARY}};
+  
+  /* Typography */
+  --font-family: {{FONT_FAMILY}};
+  --heading-font: {{HEADING_FONT}};
+  --base-size: {{BASE_SIZE}};
+  --line-height: {{LINE_HEIGHT}};
+  --heading-weight: {{HEADING_WEIGHT}};
+  --body-weight: {{BODY_WEIGHT}};
+  
+  /* Spacing Scale */
+  --space-xs: {{SPACE_XS}};
+  --space-sm: {{SPACE_SM}};
+  --space-md: {{SPACE_MD}};
+  --space-lg: {{SPACE_LG}};
+  --space-xl: {{SPACE_XL}};
+  --space-xxl: {{SPACE_XXL}};
+  
+  /* Component Variables */
+  --button-radius: {{BUTTON_RADIUS}};
+  --button-padding: {{BUTTON_PADDING}};
+  --card-radius: {{CARD_RADIUS}};
+  --card-shadow: {{CARD_SHADOW}};
+  --input-radius: {{INPUT_RADIUS}};
+  --input-padding: {{INPUT_PADDING}};
+  
+  /* Breakpoints */
+  --mobile: {{MOBILE_BREAKPOINT}};
+  --tablet: {{TABLET_BREAKPOINT}};
+  --desktop: {{DESKTOP_BREAKPOINT}};
+  --wide: {{WIDE_BREAKPOINT}};
+  
+  /* Z-index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* Container Sizes */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
+}
+
+/* Dark mode variables (optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: #ffffff;
+    --background-color: #1a1a1a;
+    --light-background: #2d2d2d;
+    --border-color: #404040;
+  }
+}
+
+/* Print styles */
+@media print {
+  :root {
+    --primary-color: #000000;
+    --secondary-color: #666666;
+    --text-color: #000000;
+    --background-color: #ffffff;
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "multi-brand-ecommerce-template",
+  "version": "1.0.0",
+  "description": "Scalable template system for multi-brand e-commerce stores with Shopify integration",
+  "main": "scripts/generate-site.js",
+  "scripts": {
+    "generate": "node scripts/generate-site.js",
+    "generate:example": "node scripts/generate-site.js example-site-config.json",
+    "build": "npm run generate:example",
+    "dev": "npx http-server build -p 3000 -c-1",
+    "start": "npm run build && npm run dev",
+    "deploy": "npm run build && vercel --prod",
+    "preview": "npm run build && vercel",
+    "clean": "rm -rf build/*",
+    "validate": "node scripts/validate-config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecommerce",
+    "shopify",
+    "template",
+    "multi-brand",
+    "static-site",
+    "template-engine",
+    "vercel",
+    "javascript",
+    "css",
+    "html"
+  ],
+  "author": "Multi-Brand Template System",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/multi-brand-ecommerce-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/multi-brand-ecommerce-template/issues"
+  },
+  "homepage": "https://github.com/your-username/multi-brand-ecommerce-template#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "templates/",
+    "assets/",
+    "config/",
+    "scripts/",
+    "vercel.json",
+    "example-site-config.json"
+  ]
+}

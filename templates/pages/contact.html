@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="{{LANGUAGE}}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - {{SITE_NAME}}</title>
+    <meta name="description" content="Contact {{SITE_NAME}} - Get in touch with our customer support team">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/assets/css/variables.css">
+    <link rel="stylesheet" href="/assets/css/framework.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+<body>
+    <!-- Header Component -->
+    {{> header}}
+
+    <!-- Contact Page -->
+    <section class="contact-page">
+        <div class="container">
+            <div class="text-center mb-xl">
+                <h1>Contact Us</h1>
+                <p>We're here to help! Get in touch with our friendly customer support team.</p>
+            </div>
+
+            <div class="row">
+                <!-- Contact Form -->
+                <div class="col-6">
+                    <div class="contact-form-container">
+                        <h2>Send us a message</h2>
+                        <form class="contact-form" onsubmit="submitContactForm(event)">
+                            <div class="form-group">
+                                <label class="form-label" for="name">Full Name *</label>
+                                <input type="text" class="form-input" id="name" name="name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email Address *</label>
+                                <input type="email" class="form-input" id="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="phone">Phone Number</label>
+                                <input type="tel" class="form-input" id="phone" name="phone">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="subject">Subject *</label>
+                                <select class="form-input" id="subject" name="subject" required>
+                                    <option value="">Select a topic</option>
+                                    <option value="order">Order Inquiry</option>
+                                    <option value="product">Product Question</option>
+                                    <option value="shipping">Shipping & Delivery</option>
+                                    <option value="return">Returns & Refunds</option>
+                                    <option value="technical">Technical Support</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="message">Message *</label>
+                                <textarea class="form-input" id="message" name="message" rows="5" required placeholder="Tell us how we can help you..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-large btn-block">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="col-6">
+                    <div class="contact-info-container">
+                        <h2>Get in touch</h2>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="contact-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                </div>
+                                <div class="contact-details">
+                                    <h3>Email Support</h3>
+                                    <p>{{CONTACT_EMAIL}}</p>
+                                    <p class="contact-note">We typically respond within 24 hours</p>
+                                </div>
+                            </div>
+
+                            {{#if CONTACT_PHONE}}
+                            <div class="contact-method">
+                                <div class="contact-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                    </svg>
+                                </div>
+                                <div class="contact-details">
+                                    <h3>Phone Support</h3>
+                                    <p>{{CONTACT_PHONE}}</p>
+                                    <p class="contact-note">{{SUPPORT_HOURS}}</p>
+                                </div>
+                            </div>
+                            {{/if}}
+
+                            <div class="contact-method">
+                                <div class="contact-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                    </svg>
+                                </div>
+                                <div class="contact-details">
+                                    <h3>Address</h3>
+                                    <p>{{BUSINESS_ADDRESS}}</p>
+                                </div>
+                            </div>
+
+                            <div class="contact-method">
+                                <div class="contact-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                                        <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                    </svg>
+                                </div>
+                                <div class="contact-details">
+                                    <h3>Business Hours</h3>
+                                    <p>{{SUPPORT_HOURS}}</p>
+                                    <p class="contact-note">{{TIMEZONE}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Link -->
+                        <div class="faq-link mt-lg">
+                            <h3>Need Quick Answers?</h3>
+                            <p>Check our FAQ section for instant answers to common questions.</p>
+                            <a href="/faq" class="btn btn-outline">Visit FAQ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Component -->
+    {{> footer}}
+
+    <!-- JavaScript -->
+    <script src="/assets/js/template-engine.js"></script>
+    <script src="/assets/js/contact-form.js"></script>
+</body>
+</html>
+
+<style>
+/* Contact page specific styles */
+.contact-page {
+    padding: var(--space-xl) 0;
+    background: var(--light-background);
+}
+
+.contact-form-container,
+.contact-info-container {
+    background: white;
+    padding: var(--space-xl);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    height: 100%;
+}
+
+.contact-methods {
+    margin-top: var(--space-lg);
+}
+
+.contact-method {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.contact-details h3 {
+    margin-bottom: var(--space-sm);
+    color: var(--text-color);
+}
+
+.contact-details p {
+    margin-bottom: var(--space-xs);
+    color: var(--text-color);
+}
+
+.contact-note {
+    font-size: 0.9rem;
+    color: #666 !important;
+}
+
+.faq-link {
+    background: var(--light-background);
+    padding: var(--space-lg);
+    border-radius: var(--card-radius);
+    text-align: center;
+}
+
+.faq-link h3 {
+    margin-bottom: var(--space-sm);
+}
+
+.faq-link p {
+    margin-bottom: var(--space-md);
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .contact-form-container,
+    .contact-info-container {
+        padding: var(--space-lg);
+        margin-bottom: var(--space-lg);
+    }
+    
+    .contact-method {
+        margin-bottom: var(--space-lg);
+    }
+}
+</style>

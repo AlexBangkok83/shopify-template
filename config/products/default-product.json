@@ -1,0 +1,105 @@
+{
+  "name": "Premium Beauty Product",
+  "type": "beauty",
+  "description": "Transform your beauty routine with our premium product that delivers exceptional results you can see and feel.",
+  "shortDescription": "Premium beauty solution for radiant results",
+  "features": [
+    "Premium quality ingredients",
+    "Clinically tested formula", 
+    "Suitable for all skin types",
+    "Easy to use",
+    "Fast-acting results"
+  ],
+  "benefits": [
+    "Improves skin texture",
+    "Provides long-lasting results",
+    "Enhances natural beauty",
+    "Boosts confidence",
+    "Safe and gentle"
+  ],
+  "pricing": {
+    "original": 89.99,
+    "current": 49.99,
+    "currency": "USD",
+    "discount": 44
+  },
+  "images": {
+    "main": "/assets/images/product-main.jpg",
+    "gallery": [
+      "/assets/images/product-1.jpg",
+      "/assets/images/product-2.jpg", 
+      "/assets/images/product-3.jpg",
+      "/assets/images/product-4.jpg"
+    ],
+    "lifestyle": [
+      "/assets/images/lifestyle-1.jpg",
+      "/assets/images/lifestyle-2.jpg"
+    ]
+  },
+  "variants": [
+    {
+      "id": "variant-1",
+      "name": "Single Pack",
+      "price": 49.99,
+      "originalPrice": 89.99,
+      "savings": 40.00,
+      "popular": false
+    },
+    {
+      "id": "variant-2", 
+      "name": "Double Pack",
+      "price": 79.99,
+      "originalPrice": 179.98,
+      "savings": 99.99,
+      "popular": true,
+      "badge": "Most Popular"
+    },
+    {
+      "id": "variant-3",
+      "name": "Triple Pack", 
+      "price": 99.99,
+      "originalPrice": 269.97,
+      "savings": 169.98,
+      "popular": false,
+      "badge": "Best Value"
+    }
+  ],
+  "reviews": {
+    "average": 4.8,
+    "count": 1247,
+    "featured": [
+      {
+        "name": "Sarah M.",
+        "rating": 5,
+        "text": "Amazing results! I've been using this for 3 weeks and already see a huge difference.",
+        "verified": true,
+        "date": "2024-01-15"
+      },
+      {
+        "name": "Jessica L.",
+        "rating": 5, 
+        "text": "Best purchase I've made this year. Highly recommend!",
+        "verified": true,
+        "date": "2024-01-10"
+      },
+      {
+        "name": "Maria K.",
+        "rating": 4,
+        "text": "Great product, fast shipping. Will definitely buy again.",
+        "verified": true,
+        "date": "2024-01-08"
+      }
+    ]
+  },
+  "urgency": {
+    "enabled": true,
+    "type": "limited_stock",
+    "message": "Only {{count}} left in stock!",
+    "count": 7
+  },
+  "guarantee": {
+    "period": 60,
+    "type": "money-back",
+    "description": "60-day money-back guarantee - love it or get your money back!"
+  }
+}

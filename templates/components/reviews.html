@@ -1,0 +1,437 @@
+<!-- Reviews Component -->
+<section class="reviews">
+  <div class="container">
+    <div class="text-center mb-xl">
+      <h2>{{TESTIMONIAL_TITLE}}</h2>
+      <p class="text-lg">See what our customers are saying about {{PRODUCT_NAME}}</p>
+      
+      <!-- Overall Rating -->
+      <div class="overall-rating mt-lg">
+        <div class="rating-score">
+          <span class="rating-number">{{AVERAGE_RATING}}</span>
+          <div class="rating-stars">
+            {{#each RATING_STARS}}
+            <svg class="review-star" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            {{/each}}
+          </div>
+          <p class="rating-text">Based on {{REVIEWS_COUNT}} reviews</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Reviews -->
+    <div class="review-grid">
+      {{#each FEATURED_REVIEWS}}
+      <div class="review-card">
+        <!-- Review Rating -->
+        <div class="review-rating">
+          {{#each this.stars}}
+          <svg class="review-star" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          {{/each}}
+        </div>
+
+        <!-- Review Text -->
+        <blockquote class="review-text">
+          "{{this.text}}"
+        </blockquote>
+
+        <!-- Review Author -->
+        <div class="review-author">
+          <div class="review-avatar">
+            {{this.initial}}
+          </div>
+          <div class="review-details">
+            <div class="review-name">{{this.name}}</div>
+            {{#if this.verified}}
+            <div class="review-verified">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Verified Purchase
+            </div>
+            {{/if}}
+            <div class="review-date">{{this.date}}</div>
+          </div>
+        </div>
+
+        <!-- Review Images (if available) -->
+        {{#if this.images}}
+        <div class="review-images">
+          {{#each this.images}}
+          <img src="{{this}}" alt="Customer photo" class="review-image">
+          {{/each}}
+        </div>
+        {{/if}}
+      </div>
+      {{/each}}
+    </div>
+
+    <!-- Review Summary -->
+    {{#if SHOW_REVIEW_SUMMARY}}
+    <div class="review-summary mt-xl">
+      <h3 class="text-center mb-lg">Review Breakdown</h3>
+      <div class="rating-breakdown">
+        {{#each RATING_BREAKDOWN}}
+        <div class="rating-row">
+          <div class="rating-label">{{this.stars}} stars</div>
+          <div class="rating-bar">
+            <div class="rating-fill" style="width: {{this.percentage}}%"></div>
+          </div>
+          <div class="rating-count">{{this.count}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    <!-- Review Highlights -->
+    {{#if SHOW_REVIEW_HIGHLIGHTS}}
+    <div class="review-highlights mt-xl">
+      <h3 class="text-center mb-lg">What Customers Love</h3>
+      <div class="highlights-grid">
+        {{#each REVIEW_HIGHLIGHTS}}
+        <div class="highlight-item">
+          <div class="highlight-icon">{{this.icon}}</div>
+          <div class="highlight-text">{{this.text}}</div>
+          <div class="highlight-mentions">Mentioned {{this.count}} times</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    <!-- Write Review CTA -->
+    {{#if SHOW_WRITE_REVIEW}}
+    <div class="write-review-cta text-center mt-xl">
+      <h3>Share Your Experience</h3>
+      <p>Help other customers by sharing your honest review</p>
+      <button class="btn btn-outline btn-large mt-md" onclick="openReviewModal()">
+        Write a Review
+      </button>
+    </div>
+    {{/if}}
+  </div>
+</section>
+
+<!-- Review Modal (if enabled) -->
+{{#if SHOW_WRITE_REVIEW}}
+<div class="modal" id="review-modal">
+  <div class="modal-backdrop" onclick="closeReviewModal()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Write a Review</h3>
+      <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form class="review-form" onsubmit="submitReview(event)">
+        <div class="form-group">
+          <label class="form-label">Your Rating</label>
+          <div class="rating-input" id="rating-input">
+            <svg class="rating-star-input" data-rating="1" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg class="rating-star-input" data-rating="2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg class="rating-star-input" data-rating="3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg class="rating-star-input" data-rating="4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg class="rating-star-input" data-rating="5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review-title">Review Title</label>
+          <input type="text" class="form-input" id="review-title" placeholder="Summary of your experience" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review-text">Your Review</label>
+          <textarea class="form-input" id="review-text" rows="4" placeholder="Tell us about your experience with this product..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review-name">Your Name</label>
+          <input type="text" class="form-input" id="review-name" placeholder="Your name (will be displayed publicly)" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review-email">Email Address</label>
+          <input type="email" class="form-input" id="review-email" placeholder="Your email (for verification only)" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Submit Review</button>
+      </form>
+    </div>
+  </div>
+</div>
+{{/if}}
+
+<style>
+/* Reviews specific styles */
+.overall-rating {
+  display: inline-block;
+  padding: var(--space-lg);
+  background: var(--light-background);
+  border-radius: var(--card-radius);
+}
+
+.rating-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.rating-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.rating-stars {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.review-star {
+  color: #FFD700;
+}
+
+.rating-text {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.review-images {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.review-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--input-radius);
+}
+
+.review-summary {
+  background: var(--light-background);
+  padding: var(--space-xl);
+  border-radius: var(--card-radius);
+}
+
+.rating-breakdown {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.rating-label {
+  min-width: 60px;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.rating-bar {
+  flex: 1;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rating-fill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width var(--transition-base);
+}
+
+.rating-count {
+  min-width: 30px;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
+}
+
+.review-highlights {
+  background: white;
+  padding: var(--space-xl);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+}
+
+.highlight-item {
+  text-align: center;
+  padding: var(--space-lg);
+  border-radius: var(--input-radius);
+  border: 2px solid var(--border-color);
+  transition: all var(--transition-base);
+}
+
+.highlight-item:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.highlight-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+}
+
+.highlight-text {
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--text-color);
+}
+
+.highlight-mentions {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.write-review-cta {
+  background: var(--gradient-primary);
+  color: white;
+  padding: var(--space-xl);
+  border-radius: var(--card-radius);
+}
+
+.write-review-cta h3 {
+  color: white;
+  margin-bottom: var(--space-sm);
+}
+
+.write-review-cta p {
+  opacity: 0.9;
+  margin-bottom: var(--space-md);
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-modal);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--card-radius);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: var(--space-lg);
+}
+
+.rating-input {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.rating-star-input {
+  cursor: pointer;
+  color: #ddd;
+  transition: color var(--transition-base);
+}
+
+.rating-star-input:hover,
+.rating-star-input.active {
+  color: #FFD700;
+  fill: #FFD700;
+}
+
+@media (max-width: 768px) {
+  .overall-rating {
+    padding: var(--space-md);
+  }
+  
+  .rating-number {
+    font-size: 2.5rem;
+  }
+  
+  .highlights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    margin: var(--space-md);
+    max-height: calc(100vh - 2rem);
+  }
+}
+</style>

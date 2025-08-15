@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="{{LANGUAGE}}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{PRODUCT_NAME}} - {{SITE_NAME}}</title>
+    <meta name="description" content="{{PRODUCT_DESCRIPTION}} - {{SITE_NAME}}">
+    <meta name="keywords" content="{{PRODUCT_TAGS}}, {{PRODUCT_CATEGORY}}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{PRODUCT_NAME}} - {{SITE_NAME}}">
+    <meta property="og:description" content="{{PRODUCT_SHORT_DESCRIPTION}}">
+    <meta property="og:image" content="{{PRODUCT_MAIN_IMAGE}}">
+    <meta property="og:url" content="{{DOMAIN}}/products/{{PRODUCT_HANDLE}}">
+    <meta property="og:type" content="product">
+    <meta property="product:price:amount" content="{{PRODUCT_PRICE}}">
+    <meta property="product:price:currency" content="{{CURRENCY}}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{PRODUCT_NAME}} - {{SITE_NAME}}">
+    <meta name="twitter:description" content="{{PRODUCT_SHORT_DESCRIPTION}}">
+    <meta name="twitter:image" content="{{PRODUCT_MAIN_IMAGE}}">
+    
+    <!-- Schema.org Product -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": "{{PRODUCT_NAME}}",
+        "description": "{{PRODUCT_DESCRIPTION}}",
+        "image": "{{PRODUCT_MAIN_IMAGE}}",
+        "brand": {
+            "@type": "Brand",
+            "name": "{{SITE_NAME}}"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "{{PRODUCT_PRICE}}",
+            "priceCurrency": "{{CURRENCY}}",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+                "@type": "Organization",
+                "name": "{{SITE_NAME}}"
+            }
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "{{AVERAGE_RATING}}",
+            "reviewCount": "{{REVIEWS_COUNT}}"
+        }
+    }
+    </script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/assets/css/variables.css">
+    <link rel="stylesheet" href="/assets/css/framework.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    
+    <!-- Analytics -->
+    {{#if GA_ID}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{GA_ID}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{GA_ID}}');
+        gtag('event', 'view_item', {
+            currency: '{{CURRENCY}}',
+            value: {{PRODUCT_PRICE}},
+            items: [{
+                item_id: '{{PRODUCT_SKU}}',
+                item_name: '{{PRODUCT_NAME}}',
+                category: '{{PRODUCT_CATEGORY}}',
+                price: {{PRODUCT_PRICE}}
+            }]
+        });
+    </script>
+    {{/if}}
+</head>
+<body>
+    <!-- Header Component -->
+    {{> header}}
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="/">Home</a>
+                <span>/</span>
+                <a href="/products">Products</a>
+                <span>/</span>
+                <span>{{PRODUCT_NAME}}</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Product Details Section -->
+    <section class="product-details-section">
+        <div class="container">
+            <div class="row">
+                <!-- Product Images -->
+                <div class="col-6">
+                    <div class="product-gallery">
+                        <div class="main-image-container">
+                            <img src="{{PRODUCT_MAIN_IMAGE}}" alt="{{PRODUCT_NAME}}" class="main-product-image" id="main-image">
+                            
+                            <!-- Product Badges -->
+                            {{#if PRODUCT_SALE}}
+                            <div class="product-badge badge-sale">Sale</div>
+                            {{/if}}
+                            {{#if PRODUCT_NEW}}
+                            <div class="product-badge badge-new">New</div>
+                            {{/if}}
+                            {{#if URGENCY_ENABLED}}
+                            <div class="product-badge badge-urgency">{{URGENCY_TEXT}}</div>
+                            {{/if}}
+                            
+                            <!-- Image Zoom -->
+                            <div class="image-zoom-hint">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"/>
+                                </svg>
+                                Click to zoom
+                            </div>
+                        </div>
+                        
+                        <!-- Thumbnail Gallery -->
+                        <div class="thumbnail-gallery">
+                            <img src="{{PRODUCT_MAIN_IMAGE}}" alt="{{PRODUCT_NAME}}" class="thumbnail active" onclick="changeImage('{{PRODUCT_MAIN_IMAGE}}')">
+                            {{#each PRODUCT_GALLERY_IMAGES}}
+                            <img src="{{this}}" alt="{{../PRODUCT_NAME}}" class="thumbnail" onclick="changeImage('{{this}}')">
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Information -->
+                <div class="col-6">
+                    <div class="product-info">
+                        <h1 class="product-title">{{PRODUCT_NAME}}</h1>
+                        
+                        <!-- Rating -->
+                        <div class="product-rating">
+                            <div class="rating-stars">
+                                {{#each RATING_STARS}}
+                                <svg class="star" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                {{/each}}
+                            </div>
+                            <span class="rating-text">{{AVERAGE_RATING}} ({{REVIEWS_COUNT}} reviews)</span>
+                        </div>
+                        
+                        <!-- Pricing -->
+                        <div class="product-pricing">
+                            <div class="price-current">{{CURRENCY_SYMBOL}}{{PRODUCT_PRICE}}</div>
+                            {{#if PRODUCT_ORIGINAL_PRICE}}
+                            <div class="price-original">{{CURRENCY_SYMBOL}}{{PRODUCT_ORIGINAL_PRICE}}</div>
+                            <div class="price-discount">Save {{PRODUCT_DISCOUNT}}%</div>
+                            {{/if}}
+                        </div>
+                        
+                        <!-- Short Description -->
+                        <div class="product-summary">
+                            <p>{{PRODUCT_SHORT_DESCRIPTION}}</p>
+                        </div>
+                        
+                        <!-- Key Features -->
+                        <div class="product-features">
+                            <h3>Key Benefits:</h3>
+                            <ul class="benefits-list">
+                                {{#each PRODUCT_BENEFITS}}
+                                <li>{{this}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        
+                        <!-- Variant Selection -->
+                        {{#if SHOW_VARIANTS}}
+                        <div class="variant-selection">
+                            <h3>Choose Your Package:</h3>
+                            <div class="variant-grid">
+                                {{#each PRODUCT_VARIANTS}}
+                                <div class="variant-card {{#if this.popular}}popular{{/if}}" data-variant="{{this.id}}" onclick="selectVariant('{{this.id}}')">
+                                    {{#if this.badge}}
+                                    <div class="variant-badge">{{this.badge}}</div>
+                                    {{/if}}
+                                    <div class="variant-name">{{this.name}}</div>
+                                    <div class="variant-pricing">
+                                        <div class="variant-price">{{../CURRENCY_SYMBOL}}{{this.price}}</div>
+                                        {{#if this.originalPrice}}
+                                        <div class="variant-original">{{../CURRENCY_SYMBOL}}{{this.originalPrice}}</div>
+                                        {{/if}}
+                                    </div>
+                                    <div class="variant-savings">Save {{../CURRENCY_SYMBOL}}{{this.savings}}</div>
+                                </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        
+                        <!-- Quantity Selector -->
+                        <div class="quantity-section">
+                            <label class="form-label">Quantity:</label>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" id="quantity">
+                                <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Cart Button -->
+                        <div class="add-to-cart-section">
+                            <button class="btn btn-primary btn-large btn-block" onclick="addToCart()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7 4V2a1 1 0 0 1 2 0v2h6V2a1 1 0 0 1 2 0v2h1a3 3 0 0 1 3 3v2H3V7a3 3 0 0 1 3-3h1z"/>
+                                </svg>
+                                Add to Cart - {{CURRENCY_SYMBOL}}{{PRODUCT_PRICE}}
+                            </button>
+                            
+                            <!-- Express Checkout -->
+                            <div class="express-checkout mt-md">
+                                <button class="btn btn-outline btn-block" onclick="buyNow()">
+                                    Buy Now with PayPal
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Trust Signals -->
+                        <div class="product-trust">
+                            <div class="trust-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M1 11h4l6-7h6v4l6 3v6l-4 2v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-1l-4-2V11z"/>
+                                </svg>
+                                <span>Free shipping worldwide</span>
+                            </div>
+                            <div class="trust-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                                </svg>
+                                <span>{{GUARANTEE_PERIOD}}-day money-back guarantee</span>
+                            </div>
+                            <div class="trust-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <span>Secure SSL encrypted checkout</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Methods -->
+                        <div class="payment-methods">
+                            <p class="payment-label">We Accept:</p>
+                            <div class="payment-icons">
+                                <img src="/assets/images/payment/visa.svg" alt="Visa" class="payment-icon">
+                                <img src="/assets/images/payment/mastercard.svg" alt="Mastercard" class="payment-icon">
+                                <img src="/assets/images/payment/paypal.svg" alt="PayPal" class="payment-icon">
+                                <img src="/assets/images/payment/apple-pay.svg" alt="Apple Pay" class="payment-icon">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="showTab('description')">Description</button>
+                <button class="tab-btn" onclick="showTab('ingredients')">Ingredients</button>
+                <button class="tab-btn" onclick="showTab('usage')">How to Use</button>
+                <button class="tab-btn" onclick="showTab('shipping')">Shipping & Returns</button>
+            </div>
+            
+            <div class="tabs-content">
+                <div class="tab-panel active" id="description">
+                    <h3>Product Description</h3>
+                    <p>{{PRODUCT_DESCRIPTION}}</p>
+                    
+                    <h4>What Makes It Special:</h4>
+                    <ul>
+                        {{#each PRODUCT_FEATURES}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                
+                <div class="tab-panel" id="ingredients">
+                    <h3>Ingredients</h3>
+                    {{#if PRODUCT_INGREDIENTS}}
+                    <ul class="ingredients-list">
+                        {{#each PRODUCT_INGREDIENTS}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                    {{else}}
+                    <p>Premium quality ingredients carefully selected for optimal results.</p>
+                    {{/if}}
+                </div>
+                
+                <div class="tab-panel" id="usage">
+                    <h3>How to Use</h3>
+                    {{#if PRODUCT_USAGE}}
+                    <ol class="usage-steps">
+                        {{#each PRODUCT_USAGE}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ol>
+                    {{else}}
+                    <p>Detailed usage instructions are included with your order.</p>
+                    {{/if}}
+                </div>
+                
+                <div class="tab-panel" id="shipping">
+                    <h3>Shipping & Returns</h3>
+                    <div class="shipping-info">
+                        <div class="info-section">
+                            <h4>Shipping Information</h4>
+                            <p><strong>Standard Shipping:</strong> {{SHIPPING_TIME}}</p>
+                            <p><strong>Express Shipping:</strong> {{EXPRESS_SHIPPING_TIME}}</p>
+                            <p><strong>Free Shipping:</strong> On orders over {{CURRENCY_SYMBOL}}{{FREE_SHIPPING_THRESHOLD}}</p>
+                        </div>
+                        
+                        <div class="info-section">
+                            <h4>Return Policy</h4>
+                            <p><strong>Return Period:</strong> {{RETURN_PERIOD}}</p>
+                            <p><strong>Condition:</strong> {{RETURN_CONDITIONS}}</p>
+                            <p><strong>Refund:</strong> Full refund within {{GUARANTEE_PERIOD}} days</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Component -->
+    {{> reviews}}
+
+    <!-- Related Products -->
+    {{#if SHOW_RELATED_PRODUCTS}}
+    <section class="related-products">
+        <div class="container">
+            <h2 class="text-center mb-xl">You Might Also Like</h2>
+            <div class="product-grid">
+                {{#each RELATED_PRODUCTS}}
+                <div class="product-card">
+                    <img src="{{this.image}}" alt="{{this.name}}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">{{this.name}}</h3>
+                        <div class="product-price">
+                            <span class="price-current">{{../CURRENCY_SYMBOL}}{{this.price}}</span>
+                        </div>
+                        <a href="{{this.url}}" class="btn btn-outline btn-block">View Product</a>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+    {{/if}}
+
+    <!-- Footer Component -->
+    {{> footer}}
+
+    <!-- Cart Sidebar -->
+    {{> cart-sidebar}}
+
+    <!-- Image Zoom Modal -->
+    <div class="zoom-modal" id="zoom-modal" onclick="closeZoom()">
+        <img src="" alt="" class="zoom-image" id="zoom-image">
+        <button class="zoom-close" onclick="closeZoom()">&times;</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/assets/js/template-engine.js"></script>
+    <script src="/assets/js/shopify-integration.js"></script>
+    <script src="/assets/js/product-page.js"></script>
+</body>
+</html>
+
+<style>
+/* Product page specific styles */
+.breadcrumb {
+    background: var(--light-background);
+    padding: var(--space-md) 0;
+}
+
+.breadcrumb-nav {
+    font-size: 0.9rem;
+}
+
+.breadcrumb-nav a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.breadcrumb-nav span {
+    margin: 0 var(--space-sm);
+    color: #666;
+}
+
+.product-details-section {
+    padding: var(--space-xl) 0;
+}
+
+.main-image-container {
+    position: relative;
+    text-align: center;
+}
+
+.main-product-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: var(--card-radius);
+    cursor: zoom-in;
+}
+
+.image-zoom-hint {
+    position: absolute;
+    bottom: var(--space-md);
+    right: var(--space-md);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.thumbnail-gallery {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    margin-top: var(--space-md);
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--input-radius);
+    cursor: pointer;
+    opacity: 0.7;
+    border: 2px solid transparent;
+    transition: all var(--transition-base);
+}
+
+.thumbnail:hover,
+.thumbnail.active {
+    opacity: 1;
+    border-color: var(--primary-color);
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    color: #FFD700;
+}
+
+.rating-text {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+}
+
+.benefits-list li {
+    padding: var(--space-xs) 0;
+    position: relative;
+    padding-left: var(--space-lg);
+}
+
+.benefits-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.variant-grid {
+    display: grid;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+}
+
+.variant-card {
+    padding: var(--space-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--card-radius);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+    text-align: center;
+}
+
+.variant-card:hover,
+.variant-card.selected {
+    border-color: var(--primary-color);
+    background: var(--light-background);
+}
+
+.variant-card.popular {
+    border-color: var(--accent-color);
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--border-color);
+    background: white;
+    border-radius: var(--input-radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.quantity-input {
+    width: 80px;
+    text-align: center;
+    border: 2px solid var(--border-color);
+    padding: var(--space-sm);
+    border-radius: var(--input-radius);
+}
+
+.product-trust {
+    margin-top: var(--space-lg);
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    font-size: 0.9rem;
+    color: var(--success-color);
+}
+
+.payment-label {
+    font-size: 0.9rem;
+    margin-bottom: var(--space-sm);
+    color: #666;
+}
+
+.tabs-nav {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: var(--space-xl);
+}
+
+.tab-btn {
+    padding: var(--space-md) var(--space-lg);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-base);
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.ingredients-list,
+.usage-steps {
+    max-width: 600px;
+}
+
+.shipping-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-xl);
+}
+
+.info-section h4 {
+    color: var(--primary-color);
+    margin-bottom: var(--space-md);
+}
+
+.zoom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: var(--z-modal);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg);
+}
+
+.zoom-modal.active {
+    display: flex;
+}
+
+.zoom-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.zoom-close {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .tabs-nav {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        min-width: 50%;
+        padding: var(--space-sm);
+    }
+    
+    .thumbnail-gallery {
+        flex-wrap: wrap;
+    }
+    
+    .shipping-info {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

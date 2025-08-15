@@ -1,0 +1,61 @@
+{
+  "name": "Feminine Elegance",
+  "description": "Elegant feminine theme with pink accents and soft styling",
+  "variables": {
+    "primaryColor": "#FF69B4",
+    "secondaryColor": "#FFB6C1", 
+    "accentColor": "#FF1493",
+    "textColor": "#333333",
+    "backgroundColor": "#FAFAFA",
+    "lightBackground": "#FFF5F8",
+    "borderColor": "#F0E6EA",
+    "successColor": "#4CAF50",
+    "warningColor": "#FF9800",
+    "errorColor": "#F44336",
+    "fontFamily": "'Poppins', 'Arial', sans-serif",
+    "headingFont": "'Playfair Display', 'Georgia', serif",
+    "buttonStyle": "rounded",
+    "shadowColor": "rgba(255, 105, 180, 0.2)",
+    "gradientPrimary": "linear-gradient(135deg, #FF69B4, #FF1493)",
+    "gradientSecondary": "linear-gradient(135deg, #FFB6C1, #FF69B4)"
+  },
+  "typography": {
+    "baseSize": "16px",
+    "scale": 1.25,
+    "lineHeight": 1.6,
+    "headingWeight": 600,
+    "bodyWeight": 400
+  },
+  "spacing": {
+    "xs": "0.25rem",
+    "sm": "0.5rem", 
+    "md": "1rem",
+    "lg": "1.5rem",
+    "xl": "2rem",
+    "xxl": "3rem"
+  },
+  "breakpoints": {
+    "mobile": "480px",
+    "tablet": "768px",
+    "desktop": "1024px",
+    "wide": "1200px"
+  },
+  "components": {
+    "buttons": {
+      "borderRadius": "25px",
+      "padding": "12px 24px",
+      "fontWeight": 500,
+      "textTransform": "none"
+    },
+    "cards": {
+      "borderRadius": "12px",
+      "shadow": "0 4px 20px rgba(255, 105, 180, 0.1)",
+      "padding": "1.5rem"
+    },
+    "inputs": {
+      "borderRadius": "8px",
+      "padding": "12px 16px",
+      "borderWidth": "2px"
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "version": "1.0.0",
+  "template": {
+    "name": "Multi-Brand E-commerce Template",
+    "description": "Scalable template system for e-commerce stores",
+    "author": "StyleHub Template System"
+  },
+  "variables": {
+    "site": {
+      "siteName": "{{SITE_NAME}}",
+      "domain": "{{DOMAIN}}",
+      "currency": "{{CURRENCY}}",
+      "currencySymbol": "{{CURRENCY_SYMBOL}}",
+      "language": "{{LANGUAGE}}",
+      "country": "{{COUNTRY}}",
+      "timezone": "{{TIMEZONE}}"
+    },
+    "product": {
+      "name": "{{PRODUCT_NAME}}",
+      "description": "{{PRODUCT_DESCRIPTION}}",
+      "shortDescription": "{{PRODUCT_SHORT_DESCRIPTION}}",
+      "price": "{{PRODUCT_PRICE}}",
+      "originalPrice": "{{PRODUCT_ORIGINAL_PRICE}}",
+      "images": "{{PRODUCT_IMAGES}}",
+      "sku": "{{PRODUCT_SKU}}",
+      "category": "{{PRODUCT_CATEGORY}}",
+      "tags": "{{PRODUCT_TAGS}}"
+    },
+    "market": {
+      "shippingTime": "{{SHIPPING_TIME}}",
+      "returnPeriod": "{{RETURN_PERIOD}}",
+      "contactEmail": "{{CONTACT_EMAIL}}",
+      "contactPhone": "{{CONTACT_PHONE}}",
+      "supportHours": "{{SUPPORT_HOURS}}",
+      "address": "{{BUSINESS_ADDRESS}}",
+      "vatNumber": "{{VAT_NUMBER}}",
+      "companyNumber": "{{COMPANY_NUMBER}}"
+    },
+    "theme": {
+      "primaryColor": "{{PRIMARY_COLOR}}",
+      "secondaryColor": "{{SECONDARY_COLOR}}",
+      "accentColor": "{{ACCENT_COLOR}}",
+      "textColor": "{{TEXT_COLOR}}",
+      "backgroundColor": "{{BACKGROUND_COLOR}}",
+      "fontFamily": "{{FONT_FAMILY}}",
+      "headingFont": "{{HEADING_FONT}}",
+      "buttonStyle": "{{BUTTON_STYLE}}"
+    },
+    "content": {
+      "heroTitle": "{{HERO_TITLE}}",
+      "heroSubtitle": "{{HERO_SUBTITLE}}",
+      "ctaText": "{{CTA_TEXT}}",
+      "guaranteeText": "{{GUARANTEE_TEXT}}",
+      "testimonialTitle": "{{TESTIMONIAL_TITLE}}",
+      "aboutText": "{{ABOUT_TEXT}}",
+      "faqTitle": "{{FAQ_TITLE}}"
+    },
+    "shopify": {
+      "shopDomain": "{{SHOPIFY_DOMAIN}}",
+      "storefrontToken": "{{STOREFRONT_TOKEN}}",
+      "productId": "{{SHOPIFY_PRODUCT_ID}}",
+      "variantId": "{{SHOPIFY_VARIANT_ID}}"
+    },
+    "analytics": {
+      "googleAnalyticsId": "{{GA_ID}}",
+      "facebookPixelId": "{{FB_PIXEL_ID}}",
+      "tiktokPixelId": "{{TIKTOK_PIXEL_ID}}"
+    }
+  },
+  "components": {
+    "header": {
+      "enabled": true,
+      "showCart": true,
+      "showNavigation": true,
+      "showSearch": false
+    },
+    "footer": {
+      "enabled": true,
+      "showSocial": true,
+      "showLinks": true,
+      "showNewsletter": true
+    },
+    "countdown": {
+      "enabled": false,
+      "endDate": "{{COUNTDOWN_END}}"
+    },
+    "trustSignals": {
+      "enabled": true,
+      "showGuarantee": true,
+      "showPaymentMethods": true,
+      "showSecurity": true
+    },
+    "reviews": {
+      "enabled": true,
+      "source": "static",
+      "count": 5
+    },
+    "urgencyBanner": {
+      "enabled": false,
+      "text": "{{URGENCY_TEXT}}"
+    }
+  },
+  "pages": {
+    "home": true,
+    "product": true,
+    "products": false,
+    "terms": true,
+    "privacy": true,
+    "delivery": true,
+    "refund": true,
+    "contact": true,
+    "tracking": true,
+    "about": true,
+    "faq": true,
+    "reviews": true
+  }
+}

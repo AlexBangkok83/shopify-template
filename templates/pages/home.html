@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="{{LANGUAGE}}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{SITE_NAME}} - {{HERO_TITLE}}</title>
+    <meta name="description" content="{{HERO_SUBTITLE}} - {{SITE_NAME}}">
+    <meta name="keywords" content="{{PRODUCT_TAGS}}, {{PRODUCT_CATEGORY}}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{SITE_NAME}} - {{HERO_TITLE}}">
+    <meta property="og:description" content="{{HERO_SUBTITLE}}">
+    <meta property="og:image" content="{{PRODUCT_MAIN_IMAGE}}">
+    <meta property="og:url" content="{{DOMAIN}}">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{SITE_NAME}} - {{HERO_TITLE}}">
+    <meta name="twitter:description" content="{{HERO_SUBTITLE}}">
+    <meta name="twitter:image" content="{{PRODUCT_MAIN_IMAGE}}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/assets/css/variables.css">
+    <link rel="stylesheet" href="/assets/css/framework.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    
+    <!-- Analytics -->
+    {{#if GA_ID}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{GA_ID}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{GA_ID}}');
+    </script>
+    {{/if}}
+    
+    {{#if FB_PIXEL_ID}}
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{FB_PIXEL_ID}}');
+        fbq('track', 'PageView');
+    </script>
+    {{/if}}
+</head>
+<body>
+    <!-- Header Component -->
+    {{> header}}
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>{{HERO_TITLE}}</h1>
+                <p>{{HERO_SUBTITLE}}</p>
+                
+                <!-- Hero CTA Buttons -->
+                <div class="hero-cta">
+                    <a href="#product-details" class="btn btn-primary btn-large">{{CTA_TEXT}}</a>
+                    <a href="#reviews" class="btn btn-outline btn-large">Read Reviews</a>
+                </div>
+                
+                <!-- Trust Indicators -->
+                <div class="hero-trust mt-lg">
+                    <div class="trust-indicators">
+                        <div class="trust-indicator">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span>{{AVERAGE_RATING}} ({{REVIEWS_COUNT}} reviews)</span>
+                        </div>
+                        <div class="trust-indicator">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M1 11h4l6-7h6v4l6 3v6l-4 2v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-1l-4-2V11z"/>
+                            </svg>
+                            <span>Free shipping worldwide</span>
+                        </div>
+                        <div class="trust-indicator">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                            </svg>
+                            <span>{{GUARANTEE_PERIOD}}-day guarantee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase Section -->
+    <section class="product-showcase" id="product-details">
+        <div class="container">
+            <div class="row align-center">
+                <div class="col-6">
+                    <div class="product-images">
+                        <div class="main-image">
+                            <img src="{{PRODUCT_MAIN_IMAGE}}" alt="{{PRODUCT_NAME}}" class="product-main-img">
+                            {{#if URGENCY_ENABLED}}
+                            <div class="product-badge badge-error">{{URGENCY_TEXT}}</div>
+                            {{/if}}
+                        </div>
+                        <div class="image-gallery mt-md">
+                            {{#each PRODUCT_GALLERY_IMAGES}}
+                            <img src="{{this}}" alt="{{../PRODUCT_NAME}}" class="gallery-thumb" onclick="changeMainImage('{{this}}')">
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="product-details">
+                        <h2>{{PRODUCT_NAME}}</h2>
+                        <p class="product-description">{{PRODUCT_DESCRIPTION}}</p>
+                        
+                        <!-- Pricing -->
+                        <div class="product-pricing">
+                            <div class="price-current">{{CURRENCY_SYMBOL}}{{PRODUCT_PRICE}}</div>
+                            {{#if PRODUCT_ORIGINAL_PRICE}}
+                            <div class="price-original">{{CURRENCY_SYMBOL}}{{PRODUCT_ORIGINAL_PRICE}}</div>
+                            <div class="price-savings">Save {{CURRENCY_SYMBOL}}{{PRODUCT_SAVINGS}}</div>
+                            {{/if}}
+                        </div>
+                        
+                        <!-- Product Features -->
+                        <div class="product-features mt-lg">
+                            <h3>Key Benefits:</h3>
+                            <ul class="features-list">
+                                {{#each PRODUCT_FEATURES}}
+                                <li>{{this}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        
+                        <!-- Add to Cart -->
+                        <div class="product-purchase mt-lg">
+                            {{#if SHOW_VARIANTS}}
+                            <div class="variant-selector mb-md">
+                                <label class="form-label">Choose Your Package:</label>
+                                <div class="variant-options">
+                                    {{#each PRODUCT_VARIANTS}}
+                                    <div class="variant-option {{#if this.popular}}popular{{/if}}" data-variant="{{this.id}}">
+                                        {{#if this.badge}}<div class="variant-badge">{{this.badge}}</div>{{/if}}
+                                        <div class="variant-name">{{this.name}}</div>
+                                        <div class="variant-price">{{../CURRENCY_SYMBOL}}{{this.price}}</div>
+                                        {{#if this.originalPrice}}
+                                        <div class="variant-original">{{../CURRENCY_SYMBOL}}{{this.originalPrice}}</div>
+                                        {{/if}}
+                                        <div class="variant-savings">Save {{../CURRENCY_SYMBOL}}{{this.savings}}</div>
+                                    </div>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            {{/if}}
+                            
+                            <button class="btn btn-primary btn-large btn-block add-to-cart-btn" onclick="addToCart()">
+                                Add to Cart - {{CURRENCY_SYMBOL}}{{PRODUCT_PRICE}}
+                            </button>
+                            
+                            <!-- Payment Methods -->
+                            <div class="payment-methods mt-md">
+                                <p class="text-center text-sm">We Accept:</p>
+                                <div class="payment-icons">
+                                    <img src="/assets/images/payment/visa.svg" alt="Visa" class="payment-icon">
+                                    <img src="/assets/images/payment/mastercard.svg" alt="Mastercard" class="payment-icon">
+                                    <img src="/assets/images/payment/paypal.svg" alt="PayPal" class="payment-icon">
+                                    <img src="/assets/images/payment/apple-pay.svg" alt="Apple Pay" class="payment-icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Signals Component -->
+    {{> trust-signals}}
+
+    <!-- How It Works Section -->
+    <section class="how-it-works bg-light pt-xl pb-xl">
+        <div class="container">
+            <h2 class="text-center mb-xl">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Order Online</h3>
+                        <p>Choose your package and place your order securely online</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Fast Shipping</h3>
+                        <p>We ship your order within 24 hours via express delivery</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Enjoy Results</h3>
+                        <p>Start seeing amazing results within days of using our product</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Component -->
+    <div id="reviews">
+        {{> reviews}}
+    </div>
+
+    <!-- FAQ Section -->
+    <section class="faq pt-xl pb-xl">
+        <div class="container">
+            <h2 class="text-center mb-xl">{{FAQ_TITLE}}</h2>
+            <div class="faq-container">
+                {{#each FAQ_ITEMS}}
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>{{this.question}}</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>{{this.answer}}</p>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+
+    <!-- Guarantee Section -->
+    {{#if SHOW_GUARANTEE}}
+    <section class="guarantee-section">
+        <div class="container">
+            <div class="guarantee">
+                <div class="guarantee-icon">🛡️</div>
+                <h3 class="guarantee-title">{{GUARANTEE_PERIOD}}-Day Money-Back Guarantee</h3>
+                <p class="guarantee-text">{{GUARANTEE_TEXT}}</p>
+            </div>
+        </div>
+    </section>
+    {{/if}}
+
+    <!-- Footer Component -->
+    {{> footer}}
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="cart-close" onclick="closeCart()">&times;</button>
+        </div>
+        <div class="cart-content">
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be populated by JavaScript -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <div class="total-line">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">{{CURRENCY_SYMBOL}}0.00</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Shipping:</span>
+                        <span id="cart-shipping">Free</span>
+                    </div>
+                    <div class="total-line total-final">
+                        <span>Total:</span>
+                        <span id="cart-total">{{CURRENCY_SYMBOL}}0.00</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block checkout-btn" onclick="checkout()">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+
+    <!-- JavaScript -->
+    <script src="/assets/js/template-engine.js"></script>
+    <script src="/assets/js/shopify-integration.js"></script>
+    <script src="/assets/js/interactions.js"></script>
+</body>
+</html>
+
+<style>
+/* Page-specific styles */
+.hero-trust {
+    opacity: 0.9;
+}
+
+.trust-indicators {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+}
+
+.trust-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+}
+
+.product-showcase {
+    padding: var(--space-xxl) 0;
+}
+
+.product-images {
+    position: relative;
+}
+
+.product-main-img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+}
+
+.image-gallery {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+}
+
+.gallery-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--input-radius);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity var(--transition-base);
+}
+
+.gallery-thumb:hover,
+.gallery-thumb.active {
+    opacity: 1;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li {
+    padding: var(--space-sm) 0;
+    position: relative;
+    padding-left: var(--space-lg);
+}
+
+.features-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.variant-options {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.variant-option {
+    padding: var(--space-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--card-radius);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.variant-option:hover,
+.variant-option.selected {
+    border-color: var(--primary-color);
+    background: var(--light-background);
+}
+
+.variant-option.popular {
+    border-color: var(--accent-color);
+}
+
+.variant-badge {
+    position: absolute;
+    top: -8px;
+    right: var(--space-md);
+    background: var(--accent-color);
+    color: white;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-xl);
+}
+
+.step-item {
+    text-align: center;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto var(--space-md);
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-md);
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) 0;
+    cursor: pointer;
+}
+
+.faq-question h3 {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.faq-toggle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    transition: transform var(--transition-base);
+}
+
+.faq-item.active .faq-toggle {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow);
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    padding-bottom: var(--space-md);
+}
+
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: right var(--transition-slow);
+    z-index: var(--z-modal);
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-sidebar.active {
+    right: 0;
+}
+
+.cart-header {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-items {
+    flex: 1;
+    padding: var(--space-lg);
+    overflow-y: auto;
+}
+
+.cart-footer {
+    padding: var(--space-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.total-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+
+.total-final {
+    font-weight: 600;
+    font-size: 1.125rem;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-color);
+}
+
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--z-modal) - 1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.cart-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 768px) {
+    .trust-indicators {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    
+    .cart-sidebar {
+        width: 100vw;
+        right: -100vw;
+    }
+    
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

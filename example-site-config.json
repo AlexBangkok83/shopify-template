@@ -1,0 +1,185 @@
+{
+  "name": "Beauty Brand Example",
+  "description": "Example configuration for a beauty product site",
+  "theme": "feminine",
+  "market": "default",
+  "product": "default-product",
+  
+  "variables": {
+    "SITE_NAME": "GlowUp Beauty",
+    "DOMAIN": "https://glowup-beauty.com",
+    "CURRENCY": "USD",
+    "CURRENCY_SYMBOL": "$",
+    "LANGUAGE": "en",
+    "COUNTRY": "US",
+    
+    "PRODUCT_NAME": "Ultimate Glow Serum",
+    "PRODUCT_DESCRIPTION": "Transform your skin with our revolutionary glow serum that delivers visible results in just 7 days. Formulated with premium ingredients and backed by clinical studies.",
+    "PRODUCT_SHORT_DESCRIPTION": "Revolutionary glow serum for radiant, youthful skin",
+    "PRODUCT_PRICE": "49.99",
+    "PRODUCT_ORIGINAL_PRICE": "89.99",
+    "PRODUCT_SAVINGS": "40.00",
+    "PRODUCT_DISCOUNT": "44",
+    "PRODUCT_MAIN_IMAGE": "/assets/images/glow-serum-main.jpg",
+    "PRODUCT_CATEGORY": "skincare",
+    "PRODUCT_TAGS": "anti-aging, glow, serum, skincare",
+    
+    "PRODUCT_FEATURES": [
+      "Clinical-grade vitamin C for brightening",
+      "Hyaluronic acid for deep hydration", 
+      "Peptides for anti-aging benefits",
+      "Suitable for all skin types",
+      "Fast-absorbing, non-greasy formula"
+    ],
+    
+    "PRODUCT_BENEFITS": [
+      "Visibly brighter skin in 7 days",
+      "Reduces fine lines and wrinkles",
+      "Improves skin texture and tone", 
+      "Provides long-lasting hydration",
+      "Enhances natural radiance"
+    ],
+    
+    "PRODUCT_VARIANTS": [
+      {
+        "id": "variant-1",
+        "name": "Single Bottle",
+        "price": "49.99",
+        "originalPrice": "89.99", 
+        "savings": "40.00",
+        "popular": false
+      },
+      {
+        "id": "variant-2",
+        "name": "2-Bottle Pack",
+        "price": "79.99",
+        "originalPrice": "179.98",
+        "savings": "99.99",
+        "popular": true,
+        "badge": "Most Popular"
+      },
+      {
+        "id": "variant-3", 
+        "name": "3-Bottle Pack",
+        "price": "99.99",
+        "originalPrice": "269.97",
+        "savings": "169.98",
+        "popular": false,
+        "badge": "Best Value"
+      }
+    ],
+    
+    "HERO_TITLE": "Unlock Your Natural Glow",
+    "HERO_SUBTITLE": "Discover the power of science-backed skincare with our revolutionary glow serum",
+    "CTA_TEXT": "Get Your Glow Today",
+    "GUARANTEE_TEXT": "Love it or get your money back - no questions asked!",
+    "GUARANTEE_PERIOD": "60",
+    
+    "TESTIMONIAL_TITLE": "What Our Customers Say",
+    "AVERAGE_RATING": "4.8",
+    "REVIEWS_COUNT": "1,247",
+    
+    "FEATURED_REVIEWS": [
+      {
+        "name": "Sarah M.",
+        "rating": 5,
+        "text": "This serum is absolutely amazing! I noticed a difference in my skin within just a few days. My complexion looks brighter and more even.",
+        "verified": true,
+        "date": "2024-01-15",
+        "initial": "S",
+        "stars": [1, 1, 1, 1, 1]
+      },
+      {
+        "name": "Jessica L.",
+        "rating": 5,
+        "text": "I've tried so many serums but nothing compares to this. My skin feels incredible and the glow is real!",
+        "verified": true, 
+        "date": "2024-01-10",
+        "initial": "J",
+        "stars": [1, 1, 1, 1, 1]
+      },
+      {
+        "name": "Maria K.",
+        "rating": 4,
+        "text": "Great product and fast shipping. I'm already seeing improvements in my skin texture.",
+        "verified": true,
+        "date": "2024-01-08", 
+        "initial": "M",
+        "stars": [1, 1, 1, 1, 0]
+      }
+    ],
+    
+    "FAQ_TITLE": "Frequently Asked Questions",
+    "FAQ_ITEMS": [
+      {
+        "question": "How long does it take to see results?",
+        "answer": "Most customers notice improvements in skin brightness and texture within 7-14 days of consistent use."
+      },
+      {
+        "question": "Is this suitable for sensitive skin?",
+        "answer": "Yes! Our formula is gentle and suitable for all skin types, including sensitive skin. We recommend patch testing before first use."
+      },
+      {
+        "question": "How should I use this serum?",
+        "answer": "Apply 2-3 drops to clean, dry skin morning and evening. Follow with your favorite moisturizer and sunscreen during the day."
+      },
+      {
+        "question": "What makes this different from other serums?",
+        "answer": "Our unique formula combines clinical-grade vitamin C, hyaluronic acid, and peptides in optimal concentrations for maximum effectiveness."
+      }
+    ],
+    
+    "SHIPPING_TIME": "3-5 business days",
+    "EXPRESS_SHIPPING_TIME": "1-2 business days",
+    "FREE_SHIPPING_THRESHOLD": "50",
+    "RETURN_PERIOD": "30 days",
+    "RETURN_CONDITIONS": "Items must be unused and in original packaging",
+    
+    "CONTACT_EMAIL": "support@glowup-beauty.com",
+    "CONTACT_PHONE": "+1 (555) 123-4567",
+    "SUPPORT_HOURS": "Monday-Friday 9AM-6PM EST",
+    "BUSINESS_ADDRESS": "123 Beauty Street, New York, NY 10001",
+    
+    "COMPANY_NAME": "GlowUp Beauty LLC",
+    "COMPANY_NUMBER": "12345678",
+    "VAT_NUMBER": "VAT123456789",
+    
+    "SHOPIFY_DOMAIN": "glowup-beauty.myshopify.com",
+    "STOREFRONT_TOKEN": "your-storefront-access-token-here",
+    "SHOPIFY_PRODUCT_ID": "gid://shopify/Product/1234567890",
+    "SHOPIFY_VARIANT_ID": "gid://shopify/ProductVariant/1234567890",
+    
+    "GA_ID": "G-XXXXXXXXXX",
+    "FB_PIXEL_ID": "123456789012345",
+    "TIKTOK_PIXEL_ID": "C4ABC123DEF456GHI789JKL012MNO345",
+    
+    "FACEBOOK_URL": "https://facebook.com/glowupbeauty",
+    "INSTAGRAM_URL": "https://instagram.com/glowupbeauty",
+    "TWITTER_URL": "https://twitter.com/glowupbeauty",
+    "TIKTOK_URL": "https://tiktok.com/@glowupbeauty",
+    
+    "URGENCY_ENABLED": true,
+    "URGENCY_TEXT": "Only 7 left in stock!",
+    "URGENCY_COUNT": 7,
+    
+    "COUNTDOWN_ENABLED": false,
+    "COUNTDOWN_END": "2024-12-31T23:59:59",
+    
+    "SHOW_VARIANTS": true,
+    "SHOW_GUARANTEE": true,
+    "SHOW_REVIEWS": true,
+    "SHOW_NEWSLETTER": true,
+    "SHOW_SOCIAL": true,
+    "SHOW_LINKS": true,
+    "SHOW_PAYMENT_METHODS": true,
+    "SHOW_NAVIGATION": true,
+    "SHOW_SEARCH": false,
+    "SHOW_CART": true,
+    
+    "HAPPY_CUSTOMERS": "50,000+",
+    "YEARS_EXPERIENCE": "10+",
+    "COUNTRIES_SHIPPED": "50+",
+    
+    "ABOUT_TEXT": "GlowUp Beauty is dedicated to creating premium skincare products that deliver real results. Our science-backed formulations are designed to help you achieve your best skin ever."
+  }
+}

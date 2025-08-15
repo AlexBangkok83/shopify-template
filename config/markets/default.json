@@ -1,0 +1,61 @@
+{
+  "name": "Default Market",
+  "country": "US",
+  "language": "en",
+  "currency": "USD",
+  "currencySymbol": "$",
+  "timezone": "America/New_York",
+  "shipping": {
+    "defaultTime": "5-7 business days",
+    "expressTime": "2-3 business days",
+    "freeShippingThreshold": 50,
+    "zones": [
+      {
+        "name": "Domestic",
+        "countries": ["US"],
+        "time": "5-7 business days",
+        "cost": 9.99
+      },
+      {
+        "name": "International",
+        "countries": ["CA", "UK", "AU"],
+        "time": "10-14 business days", 
+        "cost": 19.99
+      }
+    ]
+  },
+  "returns": {
+    "period": "30 days",
+    "policy": "Free returns within 30 days",
+    "conditions": "Items must be unused and in original packaging"
+  },
+  "contact": {
+    "email": "support@example.com",
+    "phone": "+1 (555) 123-4567",
+    "hours": "Monday-Friday 9AM-5PM EST",
+    "address": {
+      "street": "123 Business St",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10001",
+      "country": "United States"
+    }
+  },
+  "legal": {
+    "companyName": "Example LLC",
+    "companyNumber": "12345678",
+    "vatNumber": "VAT123456789",
+    "registeredAddress": "123 Business St, New York, NY 10001"
+  },
+  "payment": {
+    "methods": ["visa", "mastercard", "amex", "paypal", "apple-pay", "google-pay"],
+    "processor": "shopify-payments",
+    "currency": "USD"
+  },
+  "localization": {
+    "dateFormat": "MM/DD/YYYY",
+    "timeFormat": "12h",
+    "numberFormat": "en-US",
+    "phoneFormat": "+1 (XXX) XXX-XXXX"
+  }
+}

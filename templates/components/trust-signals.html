@@ -1,0 +1,175 @@
+<!-- Trust Signals Component -->
+<section class="trust-signals">
+  <div class="container">
+    <h2 class="text-center mb-lg">Why Choose {{SITE_NAME}}?</h2>
+    
+    <div class="trust-grid">
+      <!-- Free Shipping -->
+      {{#if SHOW_FREE_SHIPPING}}
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M1 11h4l6-7h6v4l6 3v6l-4 2v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-1l-4-2V11zm2 2v3l2 1v1h10v-1l2-1v-3l-4-2h-6l-4 2z"/>
+          </svg>
+        </div>
+        <h3 class="trust-title">Free Shipping</h3>
+        <p class="trust-description">Free shipping on orders over {{FREE_SHIPPING_THRESHOLD}}</p>
+      </div>
+      {{/if}}
+
+      <!-- Money Back Guarantee -->
+      {{#if SHOW_GUARANTEE}}
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <h3 class="trust-title">{{GUARANTEE_PERIOD}} Day Guarantee</h3>
+        <p class="trust-description">{{GUARANTEE_TEXT}}</p>
+      </div>
+      {{/if}}
+
+      <!-- Secure Payments -->
+      {{#if SHOW_SECURITY}}
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          </svg>
+        </div>
+        <h3 class="trust-title">Secure Payments</h3>
+        <p class="trust-description">Your payment information is protected with 256-bit SSL encryption</p>
+      </div>
+      {{/if}}
+
+      <!-- Customer Support -->
+      {{#if SHOW_SUPPORT}}
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <h3 class="trust-title">24/7 Support</h3>
+        <p class="trust-description">Get help whenever you need it with our dedicated support team</p>
+      </div>
+      {{/if}}
+
+      <!-- Fast Delivery -->
+      {{#if SHOW_FAST_DELIVERY}}
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <h3 class="trust-title">Fast Delivery</h3>
+        <p class="trust-description">Get your order in {{SHIPPING_TIME}} with express shipping options</p>
+      </div>
+      {{/if}}
+
+      <!-- Quality Guarantee */
+      {{#if SHOW_QUALITY}}
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 11H7v8h2v-8zm4 0h-2v8h2v-8zm4 0h-2v8h2v-8zm2.5-5h-13v4h13V6zm-13-2h13c.55 0 1-.45 1-1s-.45-1-1-1h-13c-.55 0-1 .45-1 1s.45 1 1 1z"/>
+          </svg>
+        </div>
+        <h3 class="trust-title">Premium Quality</h3>
+        <p class="trust-description">Only the highest quality products that meet our strict standards</p>
+      </div>
+      {{/if}}
+    </div>
+
+    <!-- Customer Stats -->
+    {{#if SHOW_STATS}}
+    <div class="trust-stats mt-xl">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{{HAPPY_CUSTOMERS}}</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{REVIEWS_COUNT}}</div>
+          <div class="stat-label">5-Star Reviews</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{YEARS_EXPERIENCE}}</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{COUNTRIES_SHIPPED}}</div>
+          <div class="stat-label">Countries Shipped</div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</section>
+
+<style>
+/* Trust Signals specific styles */
+.trust-stats {
+  text-align: center;
+  padding: var(--space-xl) 0;
+  background: var(--light-background);
+  border-radius: var(--card-radius);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-xl);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: var(--space-sm);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trust-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
