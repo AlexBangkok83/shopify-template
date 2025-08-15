@@ -1,0 +1,59 @@
+{
+  "defaultBrand": "brand1",
+  "brands": {
+    "brand1": {
+      "name": "Pain Sweden Store",
+      "shopDomain": "painswedenstore.myshopify.com",
+      "storefrontAccessToken": "6302d10a27c4fce855c48d96b39ec7f0",
+      "apiVersion": "2024-01",
+      "theme": {
+        "primaryColor": "#007bff",
+        "secondaryColor": "#28a745",
+        "fontFamily": "Arial, sans-serif"
+      },
+      "market": "us",
+      "currency": "USD",
+      "locale": "en-US"
+    },
+    "brand2": {
+      "name": "Eco Essentials",
+      "shopDomain": "your-eco-shop.myshopify.com",
+      "storefrontAccessToken": "your-eco-storefront-access-token-here",
+      "apiVersion": "2024-01",
+      "theme": {
+        "primaryColor": "#28a745",
+        "secondaryColor": "#17a2b8",
+        "fontFamily": "Georgia, serif"
+      },
+      "market": "canada",
+      "currency": "CAD",
+      "locale": "en-CA"
+    },
+    "brand3": {
+      "name": "Tech Gadgets",
+      "shopDomain": "your-tech-shop.myshopify.com",
+      "storefrontAccessToken": "your-tech-storefront-access-token-here",
+      "apiVersion": "2024-01",
+      "theme": {
+        "primaryColor": "#6f42c1",
+        "secondaryColor": "#fd7e14",
+        "fontFamily": "Roboto, sans-serif"
+      },
+      "market": "uk",
+      "currency": "GBP",
+      "locale": "en-GB"
+    }
+  },
+  "features": {
+    "cartPersistence": true,
+    "wishlist": false,
+    "productReviews": true,
+    "socialLogin": false,
+    "giftCards": true
+  },
+  "analytics": {
+    "googleAnalytics": "",
+    "facebookPixel": "",
+    "tiktokPixel": ""
+  }
+}

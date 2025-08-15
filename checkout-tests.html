@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Functionality Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-suite {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .test-case {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        .test-pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-pending {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .error-details {
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Checkout Functionality Tests</h1>
+    <button onclick="runAllTests()">Run All Tests</button>
+    <button onclick="clearResults()">Clear Results</button>
+    
+    <div id="test-results"></div>
+
+    <!-- Mock DOM elements needed for testing -->
+    <div style="display: none;">
+        <div id="cart-sidebar"></div>
+        <div id="overlay"></div>
+        <div id="cart-items"></div>
+        <div id="cart-total"></div>
+        <div id="cart-count"></div>
+        <div id="error-message"></div>
+        <div id="loading"></div>
+        <div id="products-container"></div>
+        <div id="brand-logo"></div>
+    </div>
+
+    <script src="shopify-api.js"></script>
+    <script src="app.js"></script>
+    <script>
+        class CheckoutTester {
+            constructor() {
+                this.testResults = [];
+                this.mockShopifyApi = null;
+                this.testApp = null;
+            }
+
+            async runTest(testName, testFunc) {
+                console.log(`Running test: ${testName}`);
+                try {
+                    await testFunc();
+                    this.testResults.push({
+                        name: testName,
+                        status: 'pass',
+                        message: 'Test passed'
+                    });
+                } catch (error) {
+                    this.testResults.push({
+                        name: testName,
+                        status: 'fail',
+                        message: error.message,
+                        stack: error.stack
+                    });
+                }
+            }
+
+            assert(condition, message) {
+                if (!condition) {
+                    throw new Error(message || 'Assertion failed');
+                }
+            }
+
+            assertEqual(actual, expected, message) {
+                if (actual !== expected) {
+                    throw new Error(message || `Expected ${expected}, got ${actual}`);
+                }
+            }
+
+            assertNotNull(value, message) {
+                if (value == null) {
+                    throw new Error(message || 'Value is null or undefined');
+                }
+            }
+
+            createMockApp() {
+                // Create a mock app instance for testing
+                const mockConfig = {
+                    shopDomain: 'painswedenstore.myshopify.com',
+                    storefrontAccessToken: '6302d10a27c4fce855c48d96b39ec7f0',
+                    apiVersion: '2024-01'
+                };
+
+                const app = new MultiStoreApp();
+                app.shopify = new ShopifyStorefront(mockConfig);
+                app.cart = {
+                    id: 'gid://shopify/Cart/test-cart-id',
+                    items: [],
+                    total: 0,
+                    checkoutUrl: 'https://painswedenstore.myshopify.com/cart/c/test-checkout-token'
+                };
+                return app;
+            }
+
+            async testCheckoutMethodExists() {
+                const app = this.createMockApp();
+                this.assert(typeof app.checkout === 'function', 'checkout method should exist on MultiStoreApp');
+            }
+
+            async testGlobalCheckoutFunctionExists() {
+                this.assert(typeof window.checkout === 'function', 'Global checkout function should exist');
+            }
+
+            async testCheckoutWithValidUrl() {
+                const app = this.createMockApp();
+                let redirectCalled = false;
+                let redirectUrl = '';
+
+                // Mock window.location.href
+                const originalLocation = window.location;
+                delete window.location;
+                window.location = {
+                    href: ''
+                };
+                
+                Object.defineProperty(window.location, 'href', {
+                    set: function(url) {
+                        redirectCalled = true;
+                        redirectUrl = url;
+                    },
+                    get: function() {
+                        return redirectUrl;
+                    }
+                });
+
+                try {
+                    await app.checkout();
+                    this.assert(redirectCalled, 'Redirect should be called');
+                    this.assertEqual(redirectUrl, app.cart.checkoutUrl, 'Should redirect to checkout URL');
+                } finally {
+                    // Restore original location
+                    window.location = originalLocation;
+                }
+            }
+
+            async testCheckoutWithoutUrl() {
+                const app = this.createMockApp();
+                app.cart.checkoutUrl = null;
+
+                let errorShown = false;
+                const originalShowError = app.showError;
+                app.showError = function(message) {
+                    errorShown = true;
+                    this.assertEqual(message, 'No checkout URL available', 'Should show appropriate error message');
+                }.bind(this);
+
+                await app.checkout();
+                this.assert(errorShown, 'Error should be shown when no checkout URL is available');
+                
+                // Restore original method
+                app.showError = originalShowError;
+            }
+
+            async testGlobalCheckoutCallsAppCheckout() {
+                const app = this.createMockApp();
+                window.app = app;
+
+                let checkoutCalled = false;
+                const originalCheckout = app.checkout;
+                app.checkout = function() {
+                    checkoutCalled = true;
+                    return originalCheckout.call(this);
+                };
+
+                // Mock window.location.href to prevent actual redirect
+                const originalLocation = window.location;
+                delete window.location;
+                window.location = { href: '' };
+
+                try {
+                    window.checkout();
+                    this.assert(checkoutCalled, 'Global checkout should call app.checkout');
+                } finally {
+                    // Restore originals
+                    app.checkout = originalCheckout;
+                    window.location = originalLocation;
+                }
+            }
+
+            async testCheckoutUrlPreservation() {
+                const app = this.createMockApp();
+                const testCheckoutUrl = 'https://painswedenstore.myshopify.com/cart/c/test-token';
+                
+                // Simulate cart response with checkout URL
+                const mockCartData = {
+                    lines: { edges: [] },
+                    estimatedCost: {
+                        totalAmount: {
+                            amount: '0.00'
+                        }
+                    },
+                    checkoutUrl: testCheckoutUrl
+                };
+
+                app.updateCartFromResponse(mockCartData);
+                this.assertEqual(app.cart.checkoutUrl, testCheckoutUrl, 'Checkout URL should be preserved in cart');
+            }
+
+            async testLocalStorageCheckoutUrl() {
+                const app = this.createMockApp();
+                const testCheckoutUrl = 'https://painswedenstore.myshopify.com/cart/c/local-storage-test';
+                
+                app.cart.checkoutUrl = testCheckoutUrl;
+                app.saveCartToStorage();
+
+                // Clear cart and reload from storage
+                app.cart = { id: null, items: [], total: 0 };
+                app.loadCartFromStorage();
+
+                this.assertEqual(app.cart.checkoutUrl, testCheckoutUrl, 'Checkout URL should be preserved in localStorage');
+
+                // Clean up
+                localStorage.removeItem('shopify-cart');
+            }
+
+            async testHtmlCheckoutButtonBinding() {
+                // Test that the HTML checkout button properly calls the global function
+                const checkoutButton = document.createElement('button');
+                checkoutButton.setAttribute('onclick', 'checkout()');
+                
+                let functionCalled = false;
+                const originalCheckout = window.checkout;
+                window.checkout = function() {
+                    functionCalled = true;
+                };
+
+                try {
+                    // Simulate button click by executing the onclick attribute
+                    eval(checkoutButton.getAttribute('onclick'));
+                    this.assert(functionCalled, 'Checkout button should call global checkout function');
+                } finally {
+                    window.checkout = originalCheckout;
+                }
+            }
+
+            renderResults() {
+                const resultsDiv = document.getElementById('test-results');
+                resultsDiv.innerHTML = '';
+
+                const passCount = this.testResults.filter(r => r.status === 'pass').length;
+                const failCount = this.testResults.filter(r => r.status === 'fail').length;
+                const totalCount = this.testResults.length;
+
+                const summaryDiv = document.createElement('div');
+                summaryDiv.className = 'test-suite';
+                summaryDiv.innerHTML = `
+                    <h2>Test Summary</h2>
+                    <p><strong>Total:</strong> ${totalCount} | <strong>Passed:</strong> ${passCount} | <strong>Failed:</strong> ${failCount}</p>
+                `;
+                resultsDiv.appendChild(summaryDiv);
+
+                this.testResults.forEach(result => {
+                    const testDiv = document.createElement('div');
+                    testDiv.className = `test-case test-${result.status}`;
+                    
+                    let content = `<strong>${result.name}:</strong> ${result.message}`;
+                    if (result.status === 'fail' && result.stack) {
+                        content += `<div class="error-details">${result.stack}</div>`;
+                    }
+                    
+                    testDiv.innerHTML = content;
+                    resultsDiv.appendChild(testDiv);
+                });
+            }
+
+            async runAllTests() {
+                this.testResults = [];
+                
+                await this.runTest('Checkout method exists on MultiStoreApp', () => this.testCheckoutMethodExists());
+                await this.runTest('Global checkout function exists', () => this.testGlobalCheckoutFunctionExists());
+                await this.runTest('Checkout redirects with valid URL', () => this.testCheckoutWithValidUrl());
+                await this.runTest('Checkout shows error without URL', () => this.testCheckoutWithoutUrl());
+                await this.runTest('Global checkout calls app checkout', () => this.testGlobalCheckoutCallsAppCheckout());
+                await this.runTest('Checkout URL preservation in cart', () => this.testCheckoutUrlPreservation());
+                await this.runTest('Checkout URL persistence in localStorage', () => this.testLocalStorageCheckoutUrl());
+                await this.runTest('HTML checkout button binding', () => this.testHtmlCheckoutButtonBinding());
+
+                this.renderResults();
+            }
+        }
+
+        const tester = new CheckoutTester();
+
+        function runAllTests() {
+            tester.runAllTests();
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+        }
+
+        // Auto-run tests when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                console.log('Running checkout tests...');
+                runAllTests();
+            }, 500); // Give app time to initialize
+        });
+    </script>
+</body>
+</html>

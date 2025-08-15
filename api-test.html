@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border-left: 4px solid #007bff;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .metric {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .metric-label {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Shopify Storefront API Diagnostic Tool</h1>
+    
+    <div class="test-section">
+        <h2>Configuration</h2>
+        <div id="config-info" class="info">
+            <strong>Shop Domain:</strong> painswedenstore.myshopify.com<br>
+            <strong>API Version:</strong> 2024-01<br>
+            <strong>Token (masked):</strong> 6302d10a...
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Tests</h2>
+        <button onclick="testShopInfo()">Test Shop Info</button>
+        <button onclick="testProducts()">Test Products</button>
+        <button onclick="testInvalidToken()">Test Invalid Token</button>
+        <button onclick="testAllEndpoints()">Run All Tests</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Performance Metrics</h2>
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-value" id="total-requests">0</div>
+                <div class="metric-label">Total Requests</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="success-rate">100%</div>
+                <div class="metric-label">Success Rate</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="avg-response-time">0ms</div>
+                <div class="metric-label">Avg Response Time</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="last-status">-</div>
+                <div class="metric-label">Last Status</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            shopDomain: 'painswedenstore.myshopify.com',
+            storefrontAccessToken: '6302d10a27c4fce855c48d96b39ec7f0',
+            apiVersion: '2024-01'
+        };
+
+        // Performance tracking
+        let testMetrics = {
+            totalRequests: 0,
+            successfulRequests: 0,
+            responseTimes: [],
+            lastStatus: null
+        };
+
+        // API Client Class
+        class ShopifyStorefront {
+            constructor(config) {
+                this.shopDomain = config.shopDomain;
+                this.storefrontAccessToken = config.storefrontAccessToken;
+                this.apiVersion = config.apiVersion || '2024-01';
+                this.endpoint = `https://${this.shopDomain}/api/${this.apiVersion}/graphql.json`;
+            }
+
+            async query(query, variables = {}, testName = 'API Query') {
+                const startTime = performance.now();
+                testMetrics.totalRequests++;
+
+                try {
+                    logResult(`🚀 Starting ${testName}...`, 'info');
+                    
+                    const response = await fetch(this.endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Shopify-Storefront-Access-Token': this.storefrontAccessToken,
+                        },
+                        body: JSON.stringify({
+                            query,
+                            variables
+                        })
+                    });
+
+                    const endTime = performance.now();
+                    const responseTime = Math.round(endTime - startTime);
+                    testMetrics.responseTimes.push(responseTime);
+                    testMetrics.lastStatus = response.status;
+
+                    logResult(`Response Status: ${response.status} ${response.statusText}`, 'info');
+                    logResult(`Response Time: ${responseTime}ms`, 'info');
+
+                    if (!response.ok) {
+                        testMetrics.lastStatus = response.status;
+                        const errorText = await response.text();
+                        logResult(`❌ HTTP Error ${response.status}: ${response.statusText}`, 'error');
+                        logResult(`Response Body: ${errorText}`, 'error');
+                        
+                        if (response.status === 401) {
+                            logResult(`🔧 SOLUTION: 401 Unauthorized means your Storefront Access Token is invalid or missing required permissions.`, 'error');
+                            logResult(`To fix: Go to Shopify Admin > Apps > Develop apps > Configure Storefront API scopes`, 'error');
+                        }
+                        
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    testMetrics.successfulRequests++;
+                    
+                    if (data.errors) {
+                        logResult(`⚠️ GraphQL Errors found:`, 'warning');
+                        data.errors.forEach(error => {
+                            logResult(`- ${error.message}`, 'warning');
+                        });
+                        return data;
+                    }
+
+                    logResult(`✅ ${testName} completed successfully`, 'success');
+                    return data.data;
+
+                } catch (error) {
+                    const endTime = performance.now();
+                    const responseTime = Math.round(endTime - startTime);
+                    testMetrics.responseTimes.push(responseTime);
+                    
+                    logResult(`❌ ${testName} failed: ${error.message}`, 'error');
+                    
+                    if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                        logResult(`🔧 Network Error: Check CORS settings or network connectivity`, 'error');
+                    }
+                    
+                    throw error;
+                } finally {
+                    updateMetrics();
+                }
+            }
+        }
+
+        // Initialize API client
+        const shopify = new ShopifyStorefront(CONFIG);
+
+        // Utility Functions
+        function logResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `status ${type}`;
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            
+            resultsDiv.appendChild(logEntry);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+            
+            console.log(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            testMetrics = {
+                totalRequests: 0,
+                successfulRequests: 0,
+                responseTimes: [],
+                lastStatus: null
+            };
+            updateMetrics();
+        }
+
+        function updateMetrics() {
+            document.getElementById('total-requests').textContent = testMetrics.totalRequests;
+            
+            const successRate = testMetrics.totalRequests > 0 
+                ? Math.round((testMetrics.successfulRequests / testMetrics.totalRequests) * 100)
+                : 100;
+            document.getElementById('success-rate').textContent = `${successRate}%`;
+            
+            const avgResponseTime = testMetrics.responseTimes.length > 0
+                ? Math.round(testMetrics.responseTimes.reduce((a, b) => a + b, 0) / testMetrics.responseTimes.length)
+                : 0;
+            document.getElementById('avg-response-time').textContent = `${avgResponseTime}ms`;
+            
+            document.getElementById('last-status').textContent = testMetrics.lastStatus || '-';
+        }
+
+        // Test Functions
+        async function testShopInfo() {
+            const query = `
+                query {
+                    shop {
+                        name
+                        primaryDomain {
+                            url
+                        }
+                    }
+                }
+            `;
+
+            try {
+                const data = await shopify.query(query, {}, 'Shop Info Test');
+                
+                if (data && data.shop) {
+                    logResult(`Shop Name: ${data.shop.name}`, 'success');
+                    logResult(`Primary Domain: ${data.shop.primaryDomain.url}`, 'success');
+                }
+                
+            } catch (error) {
+                logResult(`Shop info test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testProducts() {
+            const query = `
+                query testProducts($first: Int!) {
+                    products(first: $first) {
+                        edges {
+                            node {
+                                id
+                                title
+                                handle
+                                availableForSale
+                                featuredImage {
+                                    url
+                                    altText
+                                }
+                                variants(first: 1) {
+                                    edges {
+                                        node {
+                                            id
+                                            availableForSale
+                                            priceV2 {
+                                                amount
+                                                currencyCode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        pageInfo {
+                            hasNextPage
+                        }
+                    }
+                }
+            `;
+
+            try {
+                const data = await shopify.query(query, { first: 5 }, 'Products Test');
+                
+                if (data && data.products) {
+                    const productCount = data.products.edges.length;
+                    logResult(`Found ${productCount} products`, 'success');
+                    
+                    if (productCount > 0) {
+                        const product = data.products.edges[0].node;
+                        const variant = product.variants.edges[0]?.node;
+                        
+                        logResult(`First Product: ${product.title}`, 'success');
+                        logResult(`Handle: ${product.handle}`, 'info');
+                        logResult(`Available: ${product.availableForSale}`, 'info');
+                        
+                        if (variant) {
+                            logResult(`Price: ${variant.priceV2.amount} ${variant.priceV2.currencyCode}`, 'info');
+                        }
+                        
+                        // Display products in a nice format
+                        const productsHtml = data.products.edges.map(edge => {
+                            const p = edge.node;
+                            const v = p.variants.edges[0]?.node;
+                            return `
+                                <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 4px;">
+                                    <strong>${p.title}</strong><br>
+                                    Handle: ${p.handle}<br>
+                                    Available: ${p.availableForSale ? 'Yes' : 'No'}<br>
+                                    ${v ? `Price: ${v.priceV2.amount} ${v.priceV2.currencyCode}` : 'No variants'}
+                                </div>
+                            `;
+                        }).join('');
+                        
+                        logResult(`<details><summary>📦 Product Details (click to expand)</summary>${productsHtml}</details>`, 'info');
+                    } else {
+                        logResult(`⚠️ No products found. Make sure you have published products in your Shopify store.`, 'warning');
+                    }
+                }
+                
+            } catch (error) {
+                logResult(`Products test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testInvalidToken() {
+            // Temporarily use invalid token
+            const originalToken = shopify.storefrontAccessToken;
+            shopify.storefrontAccessToken = 'invalid-token-12345';
+            
+            const query = `
+                query {
+                    shop {
+                        name
+                    }
+                }
+            `;
+
+            try {
+                await shopify.query(query, {}, 'Invalid Token Test');
+                logResult(`⚠️ Invalid token was unexpectedly accepted!`, 'warning');
+                
+            } catch (error) {
+                if (error.message.includes('401')) {
+                    logResult(`✅ Invalid token properly rejected with 401 error`, 'success');
+                } else {
+                    logResult(`❌ Unexpected error with invalid token: ${error.message}`, 'error');
+                }
+            } finally {
+                // Restore original token
+                shopify.storefrontAccessToken = originalToken;
+            }
+        }
+
+        async function testAllEndpoints() {
+            logResult(`🧪 Running comprehensive API test suite...`, 'info');
+            
+            const tests = [
+                { name: 'Shop Info', fn: testShopInfo },
+                { name: 'Products', fn: testProducts },
+                { name: 'Invalid Token', fn: testInvalidToken }
+            ];
+            
+            for (const test of tests) {
+                logResult(`\n--- Testing ${test.name} ---`, 'info');
+                try {
+                    await test.fn();
+                } catch (error) {
+                    logResult(`Test ${test.name} threw an exception: ${error.message}`, 'error');
+                }
+                
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            logResult(`\n🎉 Test suite completed!`, 'success');
+            
+            // Generate summary
+            const successRate = testMetrics.totalRequests > 0 
+                ? Math.round((testMetrics.successfulRequests / testMetrics.totalRequests) * 100)
+                : 0;
+                
+            logResult(`📊 Summary: ${testMetrics.successfulRequests}/${testMetrics.totalRequests} requests successful (${successRate}%)`, 'info');
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            logResult(`🔧 Shopify API Diagnostic Tool loaded`, 'info');
+            logResult(`Ready to test API connection to ${CONFIG.shopDomain}`, 'info');
+        });
+    </script>
+</body>
+</html>

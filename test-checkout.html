@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Checkout Functionality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .checkout-btn {
+            background: #28a745;
+            font-size: 16px;
+            padding: 12px 24px;
+        }
+        .checkout-btn:hover {
+            background: #218838;
+        }
+        .test-output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .mock-cart {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .hidden-elements {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Checkout Functionality Test</h1>
+        <p>This page tests the checkout functionality that was fixed.</p>
+
+        <div class="test-section">
+            <h3>Test Controls</h3>
+            <button onclick="runValidation()">Run Validation Tests</button>
+            <button onclick="simulateCart()">Simulate Cart with Items</button>
+            <button onclick="clearTestOutput()">Clear Output</button>
+            <div id="test-output" class="test-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Manual Checkout Test</h3>
+            <div class="mock-cart">
+                <p><strong>Mock Cart:</strong> <span id="cart-status">Empty</span></p>
+                <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+                <p><strong>Checkout URL:</strong> <span id="checkout-url-status">Not available</span></p>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Test Checkout Button</button>
+            <p><small>Note: This will attempt to redirect to Shopify checkout if cart has items</small></p>
+        </div>
+
+        <div class="test-section">
+            <h3>Real Application Elements</h3>
+            <p>The following elements are from the real application:</p>
+            
+            <!-- Minimal cart sidebar for testing -->
+            <div id="cart-sidebar" style="position: relative; width: 300px; background: white; border: 1px solid #ddd; border-radius: 5px;">
+                <div style="padding: 10px; border-bottom: 1px solid #eee;">
+                    <strong>Shopping Cart</strong>
+                </div>
+                <div id="cart-items" style="padding: 10px;">
+                    <p>Your cart is empty</p>
+                </div>
+                <div style="padding: 10px; border-top: 1px solid #eee; text-align: center;">
+                    <div id="cart-total">Total: $0.00</div>
+                    <button class="checkout-btn" onclick="checkout()" style="width: 100%; margin-top: 10px;">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden elements required by the app -->
+    <div class="hidden-elements">
+        <div id="overlay"></div>
+        <div id="cart-count">0</div>
+        <div id="error-message"></div>
+        <div id="loading"></div>
+        <div id="products-container"></div>
+        <div id="brand-logo"></div>
+    </div>
+
+    <!-- Load the application scripts -->
+    <script src="shopify-api.js"></script>
+    <script src="app.js"></script>
+    <script src="validate-checkout.js"></script>
+
+    <script>
+        let testOutput = document.getElementById('test-output');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+            testOutput.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            testOutput.scrollTop = testOutput.scrollHeight;
+        }
+
+        function clearTestOutput() {
+            testOutput.textContent = '';
+        }
+
+        function runValidation() {
+            log('Starting validation tests...');
+            
+            // Capture console output
+            const originalLog = console.log;
+            console.log = function(...args) {
+                log(args.join(' '));
+                originalLog.apply(console, args);
+            };
+
+            try {
+                const results = validateCheckout();
+                log(`Validation completed: ${results.passed} passed, ${results.failed} failed`, 
+                     results.failed === 0 ? 'success' : 'error');
+            } catch (error) {
+                log(`Validation error: ${error.message}`, 'error');
+            } finally {
+                // Restore console.log
+                console.log = originalLog;
+            }
+        }
+
+        function simulateCart() {
+            if (!window.app) {
+                log('App not initialized', 'error');
+                return;
+            }
+
+            try {
+                // Create mock cart data
+                const mockCartData = {
+                    lines: {
+                        edges: [{
+                            node: {
+                                id: 'gid://shopify/CartLine/test-line-1',
+                                quantity: 2,
+                                merchandise: {
+                                    id: 'gid://shopify/ProductVariant/test-variant-1',
+                                    title: 'Test Product Variant',
+                                    priceV2: {
+                                        amount: '25.00',
+                                        currencyCode: 'USD'
+                                    },
+                                    product: {
+                                        title: 'Test Product',
+                                        featuredImage: {
+                                            url: 'https://via.placeholder.com/100'
+                                        }
+                                    }
+                                }
+                            }
+                        }]
+                    },
+                    estimatedCost: {
+                        totalAmount: {
+                            amount: '50.00',
+                            currencyCode: 'USD'
+                        }
+                    },
+                    checkoutUrl: 'https://painswedenstore.myshopify.com/cart/c/test-token-' + Date.now()
+                };
+
+                // Update cart
+                window.app.cart.id = 'gid://shopify/Cart/test-cart-' + Date.now();
+                window.app.updateCartFromResponse(mockCartData);
+                window.app.saveCartToStorage();
+
+                // Update UI
+                updateCartDisplay();
+                
+                log('Mock cart created successfully with checkout URL', 'success');
+            } catch (error) {
+                log(`Error creating mock cart: ${error.message}`, 'error');
+            }
+        }
+
+        function updateCartDisplay() {
+            if (window.app && window.app.cart) {
+                const cart = window.app.cart;
+                document.getElementById('cart-status').textContent = 
+                    cart.items.length > 0 ? `${cart.items.length} item(s)` : 'Empty';
+                document.getElementById('cart-total').textContent = cart.total.toFixed(2);
+                document.getElementById('checkout-url-status').textContent = 
+                    cart.checkoutUrl ? 'Available' : 'Not available';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                log('Test page loaded');
+                updateCartDisplay();
+                
+                // Auto-run validation
+                log('Running initial validation...');
+                runValidation();
+            }, 1000);
+        });
+
+        // Override checkout to log attempts
+        const originalCheckout = window.checkout;
+        window.checkout = function() {
+            log('Checkout button clicked');
+            
+            if (!window.app) {
+                log('App not available', 'error');
+                return;
+            }
+
+            if (!window.app.cart.checkoutUrl) {
+                log('No checkout URL available - cart may be empty', 'error');
+                return;
+            }
+
+            log(`Attempting redirect to: ${window.app.cart.checkoutUrl}`, 'success');
+            
+            // For testing, we'll just log instead of redirecting
+            if (confirm('This would redirect to Shopify checkout. Proceed?')) {
+                log('User confirmed redirect - would go to Shopify checkout', 'success');
+                // Uncomment the next line to actually redirect:
+                // window.location.href = window.app.cart.checkoutUrl;
+            } else {
+                log('User cancelled redirect', 'info');
+            }
+        };
+    </script>
+</body>
+</html>

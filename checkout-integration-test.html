@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Integration Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .mock-product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        #cart-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Checkout Integration Test</h1>
+    <p>This test simulates a complete checkout flow to verify the functionality works correctly.</p>
+
+    <div class="test-section">
+        <h2>1. Configuration Test</h2>
+        <button onclick="testConfiguration()">Test Configuration</button>
+        <div id="config-status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Cart Operations Test</h2>
+        <button onclick="simulateAddToCart()">Simulate Add to Cart</button>
+        <button onclick="clearCart()">Clear Cart</button>
+        <div id="cart-status"></div>
+        <div id="cart-info"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Checkout Function Test</h2>
+        <button onclick="testCheckoutFunction()">Test Checkout Function</button>
+        <div id="checkout-status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. End-to-End Test</h2>
+        <button onclick="runEndToEndTest()">Run Complete Test</button>
+        <div id="e2e-status"></div>
+    </div>
+
+    <!-- Include the main app files -->
+    <script src="shopify-api.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        let testApp = null;
+
+        function showStatus(elementId, message, type = 'success') {
+            const element = document.getElementById(elementId);
+            element.className = `status ${type}`;
+            element.innerHTML = message;
+        }
+
+        function testConfiguration() {
+            try {
+                // Check if app initialized properly
+                if (!window.app) {
+                    throw new Error('App not initialized');
+                }
+
+                if (!window.app.shopify) {
+                    throw new Error('Shopify API not initialized');
+                }
+
+                // Check configuration
+                const expectedDomain = 'painswedenstore.myshopify.com';
+                if (window.app.shopify.shopDomain !== expectedDomain) {
+                    throw new Error(`Expected domain ${expectedDomain}, got ${window.app.shopify.shopDomain}`);
+                }
+
+                showStatus('config-status', 'Configuration test passed! App and Shopify API properly initialized.', 'success');
+            } catch (error) {
+                showStatus('config-status', `Configuration test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function simulateAddToCart() {
+            try {
+                if (!window.app) {
+                    throw new Error('App not initialized');
+                }
+
+                // Create a mock cart with checkout URL
+                const mockCartData = {
+                    lines: {
+                        edges: [{
+                            node: {
+                                id: 'gid://shopify/CartLine/test-line-1',
+                                quantity: 1,
+                                merchandise: {
+                                    id: 'gid://shopify/ProductVariant/test-variant-1',
+                                    title: 'Test Variant',
+                                    priceV2: {
+                                        amount: '29.99',
+                                        currencyCode: 'USD'
+                                    },
+                                    product: {
+                                        title: 'Test Product',
+                                        featuredImage: {
+                                            url: 'https://example.com/test-image.jpg'
+                                        }
+                                    }
+                                }
+                            }
+                        }]
+                    },
+                    estimatedCost: {
+                        totalAmount: {
+                            amount: '29.99',
+                            currencyCode: 'USD'
+                        }
+                    },
+                    checkoutUrl: 'https://painswedenstore.myshopify.com/cart/c/test-checkout-token-' + Date.now()
+                };
+
+                // Simulate cart update
+                window.app.cart.id = 'gid://shopify/Cart/test-cart-' + Date.now();
+                window.app.updateCartFromResponse(mockCartData);
+                window.app.saveCartToStorage();
+
+                // Update display
+                updateCartInfo();
+
+                showStatus('cart-status', 'Cart simulation successful! Mock product added with checkout URL.', 'success');
+            } catch (error) {
+                showStatus('cart-status', `Cart simulation failed: ${error.message}`, 'error');
+            }
+        }
+
+        function clearCart() {
+            try {
+                if (window.app) {
+                    window.app.cart = {
+                        id: null,
+                        items: [],
+                        total: 0,
+                        checkoutUrl: null
+                    };
+                    window.app.saveCartToStorage();
+                    updateCartInfo();
+                }
+                showStatus('cart-status', 'Cart cleared successfully.', 'success');
+            } catch (error) {
+                showStatus('cart-status', `Failed to clear cart: ${error.message}`, 'error');
+            }
+        }
+
+        function updateCartInfo() {
+            const cartInfo = document.getElementById('cart-info');
+            if (window.app && window.app.cart) {
+                const cart = window.app.cart;
+                cartInfo.innerHTML = `
+                    <strong>Cart Status:</strong><br>
+                    Cart ID: ${cart.id || 'None'}<br>
+                    Items: ${cart.items ? cart.items.length : 0}<br>
+                    Total: $${cart.total ? cart.total.toFixed(2) : '0.00'}<br>
+                    Checkout URL: ${cart.checkoutUrl ? 'Available' : 'Not available'}<br>
+                    ${cart.checkoutUrl ? `<small>${cart.checkoutUrl}</small>` : ''}
+                `;
+            }
+        }
+
+        function testCheckoutFunction() {
+            try {
+                // Test global checkout function exists
+                if (typeof window.checkout !== 'function') {
+                    throw new Error('Global checkout function not found');
+                }
+
+                // Test app checkout method exists
+                if (!window.app || typeof window.app.checkout !== 'function') {
+                    throw new Error('App checkout method not found');
+                }
+
+                // Test checkout with no URL
+                const originalCart = window.app.cart;
+                window.app.cart = { checkoutUrl: null };
+                
+                let errorShown = false;
+                const originalShowError = window.app.showError;
+                window.app.showError = function(message) {
+                    errorShown = true;
+                    console.log('Expected error shown:', message);
+                };
+
+                window.app.checkout();
+                
+                if (!errorShown) {
+                    throw new Error('Expected error not shown when checkout URL is missing');
+                }
+
+                // Restore original cart and method
+                window.app.cart = originalCart;
+                window.app.showError = originalShowError;
+
+                showStatus('checkout-status', 'Checkout function tests passed! Both global function and error handling work correctly.', 'success');
+            } catch (error) {
+                showStatus('checkout-status', `Checkout function test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function runEndToEndTest() {
+            showStatus('e2e-status', 'Running end-to-end test...', 'warning');
+            
+            try {
+                // Step 1: Test configuration
+                testConfiguration();
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                // Step 2: Simulate adding item to cart
+                simulateAddToCart();
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                // Step 3: Verify checkout URL is available
+                if (!window.app.cart.checkoutUrl) {
+                    throw new Error('Checkout URL not available after adding item to cart');
+                }
+
+                // Step 4: Test checkout redirect (without actually redirecting)
+                let redirectAttempted = false;
+                let redirectUrl = '';
+
+                // Mock window.location.href temporarily
+                const originalLocation = window.location;
+                delete window.location;
+                window.location = {
+                    href: originalLocation.href
+                };
+                
+                Object.defineProperty(window.location, 'href', {
+                    set: function(url) {
+                        redirectAttempted = true;
+                        redirectUrl = url;
+                        console.log('Redirect attempted to:', url);
+                    },
+                    get: function() {
+                        return originalLocation.href;
+                    }
+                });
+
+                // Call checkout
+                await window.app.checkout();
+
+                // Restore location
+                window.location = originalLocation;
+
+                if (!redirectAttempted) {
+                    throw new Error('Checkout redirect was not attempted');
+                }
+
+                if (redirectUrl !== window.app.cart.checkoutUrl) {
+                    throw new Error(`Redirect URL mismatch. Expected: ${window.app.cart.checkoutUrl}, Got: ${redirectUrl}`);
+                }
+
+                showStatus('e2e-status', `
+                    <strong>End-to-end test PASSED!</strong><br>
+                    ✓ Configuration loaded correctly<br>
+                    ✓ Cart operations working<br>
+                    ✓ Checkout URL generated<br>
+                    ✓ Checkout redirect attempted<br>
+                    ✓ Redirect URL matches expected checkout URL<br>
+                    <br>
+                    The checkout functionality is working correctly!
+                `, 'success');
+
+            } catch (error) {
+                showStatus('e2e-status', `End-to-end test FAILED: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                updateCartInfo();
+                console.log('Integration test page loaded. You can now run tests.');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
