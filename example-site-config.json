@@ -1,43 +1,43 @@
 {
-  "name": "Beauty Brand Example",
-  "description": "Example configuration for a beauty product site",
+  "name": "Clipia UK",
+  "description": "Clipia UK hair extension product site",
   "theme": "feminine",
   "market": "default",
   "product": "default-product",
   
   "variables": {
-    "SITE_NAME": "GlowUp Beauty",
-    "DOMAIN": "https://glowup-beauty.com",
-    "CURRENCY": "USD",
-    "CURRENCY_SYMBOL": "$",
+    "SITE_NAME": "Clipia",
+    "DOMAIN": "https://clipia.co.uk",
+    "CURRENCY": "GBP",
+    "CURRENCY_SYMBOL": "£",
     "LANGUAGE": "en",
-    "COUNTRY": "US",
+    "COUNTRY": "UK",
     
-    "PRODUCT_NAME": "Ultimate Glow Serum",
-    "PRODUCT_DESCRIPTION": "Transform your skin with our revolutionary glow serum that delivers visible results in just 7 days. Formulated with premium ingredients and backed by clinical studies.",
-    "PRODUCT_SHORT_DESCRIPTION": "Revolutionary glow serum for radiant, youthful skin",
-    "PRODUCT_PRICE": "49.99",
-    "PRODUCT_ORIGINAL_PRICE": "89.99",
-    "PRODUCT_SAVINGS": "40.00",
-    "PRODUCT_DISCOUNT": "44",
-    "PRODUCT_MAIN_IMAGE": "/assets/images/glow-serum-main.jpg",
-    "PRODUCT_CATEGORY": "skincare",
-    "PRODUCT_TAGS": "anti-aging, glow, serum, skincare",
+    "PRODUCT_NAME": "Premium Hair Extensions",
+    "PRODUCT_DESCRIPTION": "Transform your look with our premium quality hair extensions. Made from 100% human hair with seamless integration technology for natural-looking volume and length.",
+    "PRODUCT_SHORT_DESCRIPTION": "Premium human hair extensions for instant transformation",
+    "PRODUCT_PRICE": "79.99",
+    "PRODUCT_ORIGINAL_PRICE": "149.99",
+    "PRODUCT_SAVINGS": "70.00",
+    "PRODUCT_DISCOUNT": "47",
+    "PRODUCT_MAIN_IMAGE": "/assets/images/hair-extensions-main.jpg",
+    "PRODUCT_CATEGORY": "hair",
+    "PRODUCT_TAGS": "hair extensions, human hair, clip-in, volume, length",
     
     "PRODUCT_FEATURES": [
-      "Clinical-grade vitamin C for brightening",
-      "Hyaluronic acid for deep hydration", 
-      "Peptides for anti-aging benefits",
-      "Suitable for all skin types",
-      "Fast-absorbing, non-greasy formula"
+      "100% premium human hair",
+      "Seamless clip-in technology",
+      "Heat styling safe up to 180°C",
+      "Available in multiple colours",
+      "Reusable and long-lasting"
     ],
     
     "PRODUCT_BENEFITS": [
-      "Visibly brighter skin in 7 days",
-      "Reduces fine lines and wrinkles",
-      "Improves skin texture and tone", 
-      "Provides long-lasting hydration",
-      "Enhances natural radiance"
+      "Instant length and volume",
+      "Natural-looking blend",
+      "Easy 5-minute application",
+      "Damage-free hair transformation",
+      "Professional salon quality"
     ],
     
     "PRODUCT_VARIANTS": [
@@ -135,14 +135,14 @@
     "RETURN_PERIOD": "30 days",
     "RETURN_CONDITIONS": "Items must be unused and in original packaging",
     
-    "CONTACT_EMAIL": "support@glowup-beauty.com",
-    "CONTACT_PHONE": "+1 (555) 123-4567",
-    "SUPPORT_HOURS": "Monday-Friday 9AM-6PM EST",
-    "BUSINESS_ADDRESS": "123 Beauty Street, New York, NY 10001",
+    "CONTACT_EMAIL": "support@clipia.co.uk",
+    "CONTACT_PHONE": "+44 20 7123 4567",
+    "SUPPORT_HOURS": "Monday-Friday 9AM-5PM GMT",
+    "BUSINESS_ADDRESS": "123 Oxford Street, London, W1D 2HX, United Kingdom",
     
-    "COMPANY_NAME": "GlowUp Beauty LLC",
+    "COMPANY_NAME": "Clipia Ltd",
     "COMPANY_NUMBER": "12345678",
-    "VAT_NUMBER": "VAT123456789",
+    "VAT_NUMBER": "123452324",
     
     "SHOPIFY_DOMAIN": "glowup-beauty.myshopify.com",
     "STOREFRONT_TOKEN": "your-storefront-access-token-here",
